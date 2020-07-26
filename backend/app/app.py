@@ -6,7 +6,7 @@ from dal.db import initialize_db
 app = Flask(__name__)
 api = Api(app)
 app.config['MONGODB_SETTINGS'] = {
-    'host': 'mongodb://localhost/database_name'
+    'host': 'mongodb://127.0.0.1/funtech'
 }
 initialize_routes(api)
 initialize_db(app)
