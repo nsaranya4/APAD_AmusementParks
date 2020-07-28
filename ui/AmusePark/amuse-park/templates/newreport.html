@@ -1,50 +1,14 @@
-<!DOCTYPE html>
-<html lang ='en'>
-<head>
-    <meta charset ="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>New Report</title>
+{% extends 'base.html' %}
+{% block head %}
+<title>New Report</title>
+{% endblock %}
 
-    <link rel='stylesheet' type="test/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-
-    <style>
-    .jumbotron{background-color:blueviolet;
-    color:white;
-    }
-    tab-content {
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        padding: 10px
-    }
-    .nav-tabs{
-        margin-bottom:0;
-        }    
-     
-    .fakeimg {
-        height: 200px;
-        background: #aaa;
-      } 
-    </style> 
-
-</head>
-<body>
+{% block body %}
 <div class="container">
-    <div class ="page-header">
-    <h1>My Crowd Sourcing Web App</h1><br>
-    </div>
     <div class="jambotran">
-        <ul class="list-inline">
-            <a href="#" class="btn btn-default btn-lg" role="button">Manage</a>
-            <button type="submit" class="btn btn-danger" role="button">Create</button>
-            <a href="#" class="btn btn-default btn-lg" role="button">View</a>
-            <a href="#" class="btn btn-default btn-lg" role="button">Search</a>
-            <a href="#" class="btn btn-default btn-lg" role="button">Social</a>
-        </ul><br>
-        <h5>Post report</h5><br>
+        <br><h3>Post report</h3><br>
         <hr style="width:100%">
-        
+
     </div>
     <span class="input-group-addon">Theme</span>
     <div class="dropdown">
@@ -54,7 +18,7 @@
         <a class="dropdown-item" href="#">Link 1</a>
         <a class="dropdown-item" href="#">Link 2</a>
         <a class="dropdown-item" href="#">Link 3</a>
-    </div><br><br><br><br>
+    </div><br><br>
     <span class="input-group-addon">Report title</span>
     <input type="text" class="form-control" placeholder="Insert a report tile"><br>
     <span class="input-group-addon">Report description</span>
@@ -70,7 +34,7 @@
     </form>                                 
     </div><br>
     <br>
-    <button type="submit" class="btn btn-danger" role="button">Cancel</button>
+    <button type="submit" href="./" class="btn btn-danger" role="button">Cancel</button>
     <button type="submit" class="btn btn-danger" role="button">Done</button>
     
 </div><br>
@@ -82,3 +46,4 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+{% endblock %}

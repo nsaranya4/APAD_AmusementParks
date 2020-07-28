@@ -6,17 +6,33 @@
 {% block body %}
 
 <div class="container" style="margin-top:30px">
+    <hr style="width:100%">
+    <h6 style=text-align:left>Posts</h6>
     <div class="row">
-        <div class="col-sm-4">
-        <a style="text-align:left;" href="#" class="btn btn-default btn-lg" role="link">Prev report</a>
-        <div class="fakeimg">Theme</div>
-        <a style="text-align:right;" href="#" class="btn btn-default btn-lg" role="link">Next report</a>
-        </div>
+        {% for post in posts %}
+        <div class="col-md-8">
+        <a style="text-align:left;" href="#" class="btn btn-default btn-lg" role="link" hidden="true">Prev report</a>
+
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">Tags</strong>
+                    <h3 class="mb-0">{{ post.title }}</h3>
+                    <div class="mb-1 text-muted">{{ post.name }}</div>
+                    <p class="card-text mb-auto">{{ post.description }}</p>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                </div>
+            </div>
+        <a style="text-align:right;" href="#" class="btn btn-default btn-lg" role="link" hidden="true">Next report</a>
+
     </div>
+    {% endfor %}
+</div>
 </div>
 <div class="container" style="margin-top:30px">
 <hr style="width:100%">
-<h6 style=text-align:left>Subscribed themes</h6>
+<h6 style=text-align:left>Subscribed parks</h6>
 <div class="row">
         {% for subscribe in subscribes %}
         <div class="col-md-4">

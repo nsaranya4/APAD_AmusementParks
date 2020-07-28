@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% block head %}
-<title>Create theme</title>
+<title>Create Park</title>
 {% endblock %}
 
 {% block body %}
+
+<div class="container">
 <div class="jambotran">
-    <h4>Create a new theme</h4><br>
+
+    <br><h3>Create a new park</h3><br>
     <hr style="width:100%">
 
-    <span class="input-group-addon">Theme name</span>
+    <span class="input-group-addon">Park name</span>
     <input type="text" class="form-control" placeholder="Insert a theme name"><br>
-    <span class="input-group-addon">Theme description</span>
+    <span class="input-group-addon">Park description</span>
     <input type="text" class="form-control"><br>
     <span class="input-group-addon">Cover Image</span>
     
@@ -35,6 +38,7 @@
     <button type="submit" class="btn btn-danger" role="button">Cancel</button>
     <button type="submit" class="btn btn-danger" role="button">Done</button>
  </div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
