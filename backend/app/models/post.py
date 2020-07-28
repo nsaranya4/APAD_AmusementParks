@@ -10,3 +10,6 @@ class Post(db.Document):
     user_id = db.StringField(required=True)
     park_id = db.StringField(required=True)
     location = db.EmbeddedDocumentField(Location)
+    tags = db.ListField(db.StringField(),required=True)
+    
+
