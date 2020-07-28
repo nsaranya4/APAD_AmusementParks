@@ -1,35 +1,36 @@
 from flask import request
 from flask_restful import Resource, reqparse
-from dal.models import Park as ParkModel
-from dal.schemas import ParkSchema
+from models.park_schema import ParkSchema
 from resources.errors import InternalServerError
 
 park_schema = ParkSchema()
 parks_schema = ParkSchema(many=True)
 
 
-class Park(Resource):
+class ParkResource(Resource):
+    def __init__(self,  **kwargs):
+        self.park_repo = kwargs['park_repo']
 
-    def get(self, id):
-        park = ParkModel.objects.get_or_404(id=id)
+    def get(self, id: str):
+        park = self.park_repo.get_by_id(id)
         return park_schema.dump(park).data, 200
 
 
-class Parks(Resource):
-    def __init__(self):
+class ParksResource(Resource):
+    def __init__(self,  **kwargs):
+        self.park_repo = kwargs['park_repo']
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('offset', type=int, required=True)
         self.reqparse.add_argument('limit', type=int, required=True)
-        super(Parks, self).__init__()
+
 
     def get(self):
         args = self.reqparse.parse_args()
         offset = args['offset']
         limit = args['limit']
-        # TODO figure out how to use pagination while querying mongodb
-        parks = ParkModel.objects()
-        parklist = parks_schema.dump(parks).data
-        return {'parks': parklist}, 200
+
+        parks = self.park_repo.get_batch(offset, limit)
+        return {'parks': parks_schema.dump(parks).data}, 200
 
     def post(self):
         json_data = request.get_json()
@@ -41,7 +42,7 @@ class Parks(Resource):
             return errors, 400
 
         try:
-            park.save()
+            park = self.park_repo.create(park)
             return park_schema.dump(park).data, 200
         except Exception:
             raise InternalServerError
