@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>Create theme</title>
+{% endblock %}
+
+{% block body %}
+<div class="jambotran">
+    <h4>Create a new theme</h4><br>
+    <hr style="width:100%">
+
+    <span class="input-group-addon">Theme name</span>
+    <input type="text" class="form-control" placeholder="Insert a theme name"><br>
+    <span class="input-group-addon">Theme description</span>
+    <input type="text" class="form-control"><br>
+    <span class="input-group-addon">Cover Image</span>
+    
+    <form action="/action_page.php">
+        <label for="img" ></label>
+        <input type="file" aria-placeholder="Select new image" id="img" name="img" accept="image/*"><br>
+        
+      </form>                                
+    <div class="dropdown"><br>
+        <button type="button" class="btn btn-primary dropdown-toggle"  data-toggle="dropdown">Select from uploads
+        <span class="caret"></span></button>       
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Link 1</a>
+            <a class="dropdown-item" href="#">Link 2</a>
+            <a class="dropdown-item" href="#">Link 3</a>
+        </div>
+     </div><br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button type="submit" class="btn btn-danger" role="button">Cancel</button>
+    <button type="submit" class="btn btn-danger" role="button">Done</button>
+ </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+{% endblock %}
