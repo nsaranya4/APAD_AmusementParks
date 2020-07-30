@@ -1,10 +1,10 @@
 from models.park import Park
 
 
-class ParkRepo():
+class ParkRepo:
 
     def get_by_id(self, id: str):
-        return Park.objects.get_or_404(id=id)
+        return Park.objects.get(id=id)
 
     def get_batch(self, offset: int, limit: int):
         # TODO figure out how to use pagination while querying mongodb
@@ -12,5 +12,5 @@ class ParkRepo():
         return park_list
 
     def create(self, park: Park):
-        park.save()
+        park = park.save()
         return park

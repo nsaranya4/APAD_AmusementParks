@@ -1,15 +1,17 @@
-from repos.db import db
+from mongoengine import (Document,
+                         ReferenceField,
+                         StringField,
+                         EmbeddedDocumentField)
+from .park import Park
 from .location import Location
+from .user import User
 
 
-class Post(db.Document):
-    name = db.StringField(required=True, unique=True)
-    title = db.StringField(required=True)
-    description = db.StringField(required=True)
-    image_id = db.StringField(required=True)
-    user_id = db.StringField(required=True)
-    park_id = db.StringField(required=True)
-    location = db.EmbeddedDocumentField(Location)
-    tags = db.ListField(db.StringField(),required=True)
-    
-
+class Post(Document):
+    name = StringField(required=True, unique=True)
+    title = StringField(required=True)
+    description = StringField(required=True)
+    image_id = StringField(required=True)
+    user = ReferenceField(User, required=True)
+    park = ReferenceField(Park, required=True)
+    location = EmbeddedDocumentField(Location)

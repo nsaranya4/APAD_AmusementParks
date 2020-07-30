@@ -1,10 +1,10 @@
 from models.post import Post
 
 
-class PostRepo():
+class PostRepo:
 
     def get_by_id(self, id: str):
-        return Post.objects.get_or_404(id=id)
+        return Post.objects.get(id=id)
 
     def get_batch(self, offset: int, limit: int):
         # TODO figure out how to use pagination while querying mongodb

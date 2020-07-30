@@ -1,6 +1,6 @@
-from repos.db import db
+from mongoengine import EmbeddedDocument, FloatField
 
 
-class Location(db.EmbeddedDocument):
-    lat = db.FloatField(required=True)
-    lng = db.FloatField(required=True)
+class Location(EmbeddedDocument):
+    lat = FloatField(required=True)
+    lng = FloatField(required=True)
