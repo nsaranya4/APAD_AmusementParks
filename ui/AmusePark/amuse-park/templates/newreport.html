@@ -6,6 +6,7 @@
 {% block body %}
 <div class="container">
     <div class="jambotran">
+{% for post in posts %}
         <br><h3>Post report</h3><br>
         <hr style="width:100%">
 
@@ -28,7 +29,7 @@
     <span class="input-group-addon">Report Image</span>
     
     
-    <form action="/action_page.php">
+    <form action="/singleTheme" method="POST">
         <label for="img" ></label>
         <input type="file" aria-placeholder="Select new image" id="img" name="img" accept="image/*"><br>
     </form>                                 
@@ -36,8 +37,9 @@
     <br>
     <button type="submit" href="./" class="btn btn-danger" role="button">Cancel</button>
     <button type="submit" class="btn btn-danger" role="button">Done</button>
-    
+{% end for %}
 </div><br>
+{% endif %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
