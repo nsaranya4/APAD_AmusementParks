@@ -5,12 +5,15 @@ from representations.park import Park, ParkSchema
 
 
 class Post:
-    def __init__(self, id: str, name: str, title: str, description: str, image_id: str, user: User, park: Park, location: Location):
+    def __init__(self, id: str, name: str, title: str, description: str,
+                 image_id: str, tags: [str], user: User, park: Park,
+                 location: Location):
         self.id = id
         self.name = name
         self.title = title
         self.description = description
         self.image_id = image_id
+        self.tags = tags
         self.user = user
         self.park = park
         self.location = location
@@ -22,6 +25,7 @@ class PostSchema(Schema):
     title = fields.Str()
     description = fields.Str()
     image_id = fields.Str()
+    tags = fields.List(fields.Str())
     user = fields.Nested(UserSchema)
     park = fields.Nested(ParkSchema)
     location = fields.Nested(LocationSchema)
@@ -33,11 +37,14 @@ class PostSchema(Schema):
 
 
 class CreatePostRequest:
-    def __init__(self, name, title, description, image_id, user_id, park_id, location):
+    def __init__(self, name: str, title: str, description: str,
+                 image_id: str, tags: [str], user_id: str, park_id: str,
+                 location: Location):
         self.name = name
         self.title = title
         self.description = description
         self.image_id = image_id
+        self.tags = tags
         self.user_id = user_id
         self.park_id = park_id
         self.location = location
@@ -48,6 +55,7 @@ class CreatePostRequestSchema(Schema):
     title = fields.Str()
     description = fields.Str()
     image_id = fields.Str()
+    tags = fields.List(fields.Str())
     user_id = fields.Str()
     park_id = fields.Str()
     location = fields.Nested(LocationSchema)

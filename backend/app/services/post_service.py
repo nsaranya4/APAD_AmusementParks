@@ -24,6 +24,7 @@ class PostService:
         post.title = create_post_request.title
         post.description = create_post_request.description
         post.image_id = create_post_request.image_id
+        post.tags = create_post_request.tags
         post.location = location
         post.park = park
         post.user = user
