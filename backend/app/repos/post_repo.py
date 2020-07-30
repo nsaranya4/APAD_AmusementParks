@@ -8,7 +8,7 @@ class PostRepo:
 
     def get_batch(self, offset: int, limit: int):
         # TODO figure out how to use pagination while querying mongodb
-        post_list = Post.objects()
+        post_list = Post.objects().skip(offset).limit(limit)
         return post_list
 
     def create(self, post: Post):
