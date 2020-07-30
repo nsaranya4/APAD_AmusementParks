@@ -6,10 +6,11 @@ class ParkRepo:
     def get_by_id(self, id: str):
         return Park.objects.get(id=id)
 
-    def get_batch(self, offset: int, limit: int):
-        # TODO figure out how to use pagination while querying mongodb
-        park_list = Park.objects().skip(offset).limit(limit)
-        return park_list
+    def get_batch(self, offset: int, limit: int, filters: dict):
+        park_list = Park.objects
+        if filters.keys().__contains__('user_id'):
+            park_list = park_list.filter(user=filters['user_id'])
+        return park_list.skip(offset).limit(limit)
 
     def create(self, park: Park):
         park = park.save()

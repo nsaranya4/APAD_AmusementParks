@@ -21,13 +21,16 @@ class ParksResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('offset', type=int, required=True)
         self.reqparse.add_argument('limit', type=int, required=True)
+        self.reqparse.add_argument('user_id', type=str)
 
     def get(self):
         args = self.reqparse.parse_args()
         offset = args['offset']
         limit = args['limit']
-
-        parks = self.park_service.get_batch(offset, limit)
+        filters = {}
+        if args['user_id'] is not None:
+            filters['user_id'] = args['user_id']
+        parks = self.park_service.get_batch(offset, limit, filters)
         return {'parks': parks}, 200
 
     def post(self):

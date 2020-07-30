@@ -26,8 +26,8 @@ class ParkService:
         park = self.park_repo.create(park)
         return self.park_schema.dump(park).data
 
-    def get_batch(self, offset, limit):
-        parks = self.park_repo.get_batch(offset, limit)
+    def get_batch(self, offset: int, limit: int, filters: dict):
+        parks = self.park_repo.get_batch(offset, limit, filters)
         return self.parks_schema.dump(parks).data
 
     def get_by_id(self, id):
