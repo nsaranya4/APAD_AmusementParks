@@ -31,8 +31,8 @@ class PostService:
         post = self.post_repo.create(post)
         return self.post_schema.dump(post).data
 
-    def get_batch(self, offset, limit):
-        posts = self.post_repo.get_batch(offset, limit)
+    def get_batch(self, offset, limit, filters):
+        posts = self.post_repo.get_batch(offset, limit, filters)
         return self.posts_schema.dump(posts).data
 
     def get_by_id(self, id):

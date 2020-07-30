@@ -6,10 +6,15 @@ class PostRepo:
     def get_by_id(self, id: str):
         return Post.objects.get(id=id)
 
-    def get_batch(self, offset: int, limit: int):
-        # TODO figure out how to use pagination while querying mongodb
-        post_list = Post.objects().skip(offset).limit(limit)
-        return post_list
+    def get_batch(self, offset: int, limit: int, filters: dict):
+        post_list = Post.objects
+        if filters.keys().__contains__('user_id'):
+            post_list = post_list.filter(user=filters['user_id'])
+        if filters.keys().__contains__('park_id'):
+            post_list = post_list.filter(park=filters['park_id'])
+        if filters.keys().__contains__('tag'):
+            post_list = post_list.filter(tags=filters['tag'])
+        return post_list.skip(offset).limit(limit)
 
     def create(self, post: Post):
         post.save()
