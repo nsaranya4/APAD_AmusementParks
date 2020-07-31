@@ -31,7 +31,7 @@ class ParksResource(Resource):
         if args['user_id'] is not None:
             filters['user_id'] = args['user_id']
         parks = self.park_service.get_batch(offset, limit, filters)
-        return {'parks': parks}, 200
+        return parks, 200
 
     def post(self):
         json_data = request.get_json()
