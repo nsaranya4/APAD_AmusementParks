@@ -15,6 +15,6 @@ def create_app():
     app.register_blueprint(post_crud, url_prefix='/posts')
 
     from .routes.park_routes import park_crud
-    app.register_blueprint(park_crud, url_prefix='/pakrs')
+    app.register_blueprint(park_crud, url_prefix='/parks')
 
     return app
