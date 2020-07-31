@@ -6,3 +6,4 @@ google-auth-oauthlib==0.4.1
 google-api-core==1.14.2
 google-api-python-client==1.7.11
 python-dateutil==2.8.0
+marshmallow==2.20.0
