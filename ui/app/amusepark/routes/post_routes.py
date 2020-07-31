@@ -5,7 +5,13 @@ from ..representations.location import Location
 from ..clients.post_client import PostClient
 
 post_crud = Blueprint('post', __name__)
-post_client = PostClient("http://localhost:5000")
+post_client = PostClient("http://127.0.0.1:5000")
+
+
+@post_crud.route('/<id>')
+def view(id):
+    post = post_client.get_by_id(id)
+    return render_template('post.html', post=post)
 
 
 @post_crud.route('/add', methods=['GET', 'POST'])
@@ -25,9 +31,5 @@ def add():
         location.lng = data['lng']
         post_request.location = location
         post = post_client.create(post_request)
-
-
-
-
-
-
+        return render_template('post.html', post=post)
+    return render_template('post.html')
