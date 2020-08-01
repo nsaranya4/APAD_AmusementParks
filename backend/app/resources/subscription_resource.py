@@ -4,15 +4,6 @@ from representations.subscription import SubscriptionSchema, CreateSubscriptionR
 from resources.errors import InternalServerError
 
 
-class SubscriptionResource(Resource):
-    def __init__(self,  **kwargs):
-        self.subscription_service = kwargs['subscription_service']
-
-    def get(self, id: str):
-        subscription = self.subscription_service.get_by_id(id)
-        return subscription, 200
-
-
 class SubscriptionsResource(Resource):
     def __init__(self,  **kwargs):
         self.subscription_service = kwargs['subscription_service']
@@ -20,15 +11,12 @@ class SubscriptionsResource(Resource):
         self.subscription_schema = SubscriptionSchema()
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('user_id', type=str)
-        self.reqparse.add_argument('park_id', type=str)
 
     def get(self):
         args = self.reqparse.parse_args()
         filters = {}
         if args['user_id'] is not None:
             filters['user_id'] = args['user_id']
-        if args['park_id'] is not None:
-            filters['park_id'] = args['park_id']
         subscriptions = self.subscription_service.get_batch(filters)
         return subscriptions, 200
 

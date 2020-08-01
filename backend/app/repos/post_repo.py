@@ -17,5 +17,5 @@ class PostRepo:
         return post_list.skip(offset).limit(limit)
 
     def create(self, post: Post):
-        post.save()
+        post = post.save()
         return post
