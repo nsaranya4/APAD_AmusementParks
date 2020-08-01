@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource, reqparse
-from representations.park import SubscriptionSchema, CreateSubscriptionSchema
+from representations.subscription import SubscriptionSchema, CreateSubscriptionRequestSchema
 from resources.errors import InternalServerError
 
 
@@ -16,7 +16,7 @@ class SubscriptionResource(Resource):
 class SubscriptionsResource(Resource):
     def __init__(self,  **kwargs):
         self.subscription_service = kwargs['subscription_service']
-        self.create_subscription_schema = CreateSubscriptionSchema()
+        self.create_subscription_request_schema = CreateSubscriptionRequestSchema()
         self.subscription_schema = SubscriptionSchema()
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('user_id', type=str)
@@ -37,7 +37,7 @@ class SubscriptionsResource(Resource):
 
         if not json_data:
             return {'message': 'No input data provided'}, 400
-        create_subscription_request, errors = self.create_subscription_schema.load(json_data)
+        create_subscription_request, errors = self.create_subscription_request_schema.load(json_data)
         if errors:
             return errors, 400
 

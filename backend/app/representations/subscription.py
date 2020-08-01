@@ -27,7 +27,7 @@ class CreateSubscriptionRequest:
         self.park_id = park_id
 
 
-class CreateSubscriptionSchema(Schema):
+class CreateSubscriptionRequestSchema(Schema):
     user_id = fields.Str()
     park_id = fields.Str()
 
