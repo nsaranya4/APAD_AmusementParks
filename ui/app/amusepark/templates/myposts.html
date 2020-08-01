@@ -10,7 +10,6 @@
     <h6 style=text-align:left>Posts</h6>
     <div class="row">
         {% for post in posts %}
-        {% if user.id == "5f22fb4d98e1155012889b59" %}
         <div class="col-md-8">
         <a style="text-align:left;" href="#" class="btn btn-default btn-lg" role="link" hidden="true">Prev report</a>
 
@@ -28,7 +27,6 @@
         <a style="text-align:right;" href="#" class="btn btn-default btn-lg" role="link" hidden="true">Next report</a>
 
     </div>
-    {% endif %}
     {% endfor %}
 </div>
 
