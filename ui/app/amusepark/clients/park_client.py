@@ -10,7 +10,7 @@ class ParkClient:
         self.parks_schema = ParkSchema(many=True)
 
     def create(self, create_park_request):
-        data = self.create_post_request_schema.dump(create_park_request).data
+        data = self.create_park_request_schema.dump(create_park_request).data
         response = requests.post(self.park_path, data=data)
         # TODO:: handle error codes
         park = self.park_schema.load(response.json()).data
