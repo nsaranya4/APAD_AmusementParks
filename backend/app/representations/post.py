@@ -5,11 +5,10 @@ from representations.park import Park, ParkSchema
 
 
 class Post:
-    def __init__(self, id: str, name: str, title: str, description: str,
+    def __init__(self, id: str, title: str, description: str,
                  image_id: str, tags: [str], user: User, park: Park,
                  location: Location):
         self.id = id
-        self.name = name
         self.title = title
         self.description = description
         self.image_id = image_id
@@ -21,7 +20,6 @@ class Post:
 
 class PostSchema(Schema):
     id = fields.Str()
-    name = fields.Str()
     title = fields.Str()
     description = fields.Str()
     image_id = fields.Str()
@@ -37,10 +35,9 @@ class PostSchema(Schema):
 
 
 class CreatePostRequest:
-    def __init__(self, name: str, title: str, description: str,
+    def __init__(self, title: str, description: str,
                  image_id: str, tags: [str], user_id: str, park_id: str,
                  location: Location):
-        self.name = name
         self.title = title
         self.description = description
         self.image_id = image_id
@@ -51,7 +48,6 @@ class CreatePostRequest:
 
 
 class CreatePostRequestSchema(Schema):
-    name = fields.Str()
     title = fields.Str()
     description = fields.Str()
     image_id = fields.Str()
@@ -64,5 +60,3 @@ class CreatePostRequestSchema(Schema):
     @post_load
     def make_create_post_Request(self, data, **kwargs):
         return CreatePostRequest(**data)
-
-

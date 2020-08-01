@@ -8,11 +8,11 @@ class ParkClient:
         self.create_park_request_schema = CreateParkRequestSchema()
         self.park_schema = ParkSchema()
         self.parks_schema = ParkSchema(many=True)
+        self.headers = {"Content-Type": "application/json", "Accept": "*/*"}
 
     def create(self, create_park_request):
         payload = self.create_park_request_schema.dump(create_park_request).data
-        headers = {"Content-Type": "application/json", "Accept": "*/*"}
-        response = requests.post(self.park_path, data=payload, headers=headers)
+        response = requests.post(self.park_path, json=payload, headers=self.headers)
         # TODO:: handle error codes
         park = self.park_schema.load(response.json()).data
         return park

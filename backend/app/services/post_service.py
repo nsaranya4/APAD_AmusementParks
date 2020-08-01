@@ -20,7 +20,6 @@ class PostService:
         location = Location()
         location.lat = create_post_request.location.lat
         location.lng = create_post_request.location.lng
-        post.name = create_post_request.name
         post.title = create_post_request.title
         post.description = create_post_request.description
         post.image_id = create_post_request.image_id

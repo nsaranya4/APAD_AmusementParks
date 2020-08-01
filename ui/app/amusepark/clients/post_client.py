@@ -8,10 +8,11 @@ class PostClient:
         self.create_post_request_schema = CreatePostRequestSchema()
         self.post_schema = PostSchema()
         self.posts_schema = PostSchema(many=True)
+        self.headers = {"Content-Type": "application/json", "Accept": "*/*"}
 
     def create(self, create_post_request):
         data = self.create_post_request_schema.dump(create_post_request).data
-        response = requests.post(self.post_path, data=data)
+        response = requests.post(self.post_path, json=data, headers=self.headers)
         # TODO:: handle error codes
         post = self.post_schema.load(response.json()).data
         return post
