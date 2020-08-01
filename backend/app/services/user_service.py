@@ -16,3 +16,8 @@ class UserService:
         user.role = create_user_request.role
         user = self.user_repo.create(user)
         return self.user_schema.dump(user).data
+
+    def get_by_email_id(self, email):
+        user = self.user_repo.get_by_id(email)
+        return self.user_schema.dump(user).data
+

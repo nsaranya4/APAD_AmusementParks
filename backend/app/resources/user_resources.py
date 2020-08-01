@@ -9,6 +9,11 @@ class UsersResource(Resource):
         self.user_service = kwargs['user_service']
         self.create_user_request_schema = CreateUserRequestSchema()
 
+    def get(self, email: str):
+        user = self.park_service.get_by_email_id(email)
+        return user, 200
+
+
     def post(self):
         json_data = request.get_json()
 
