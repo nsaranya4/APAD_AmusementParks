@@ -5,47 +5,40 @@
 
 {% block body %}
 <div class="container">
-    <div class="jambotran">
-{% for post in posts %}
-        <br><h3>Post report</h3><br>
-        <hr style="width:100%">
+<div class="jambotran">
+      <h2 class="py-3">Create new Post</h2>
+      <div class="form bg-white p-5">
+        <form method="POST">
+            <!-- Somehow make the user object reach here -->
+            <input type="hidden" name="user_id" value="5f22fb4d98e1155012889b59"/>
+            <div class="form-group">
+              <label for="park_id">{{ park.name }}</label>
+                <input type="hidden" name="park_id" id="park_id" value={{ park.id }}/>
+            </div>
+            <div class="form-group">
+              <label for="tags">Title</label>
+              <input type="text" class="form-control" id="tags"  placeholder="Enter Tags separate by comma" name="tags" required>
+            </div>
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" class="form-control" id="title"  placeholder="Enter Post Title" name="title" required>
+            </div>
 
-    </div>
-    <span class="input-group-addon">Theme</span>
-    <div class="dropdown">
-    <button type="button" class="btn btn-primary dropdown-toggle"  data-toggle="dropdown">Select from themes
-    <span class="caret"></span></button>       
-    <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">Link 1</a>
-        <a class="dropdown-item" href="#">Link 2</a>
-        <a class="dropdown-item" href="#">Link 3</a>
-    </div><br><br>
-    <span class="input-group-addon">Report title</span>
-    <input type="text" class="form-control" placeholder="Insert a report tile"><br>
-    <span class="input-group-addon">Report description</span>
-    <input type="text" class="form-control"><br>
-    <span class="input-group-addon">Report tags</span>
-    <input type="text" class="form-control" placeholder="Insert report tags"><br>
-    <span class="input-group-addon">Report Image</span>
-    
-    
-    <form action="/singleTheme" method="POST">
-        <label for="img" ></label>
-        <input type="file" aria-placeholder="Select new image" id="img" name="img" accept="image/*"><br>
-    </form>                                 
-    </div><br>
-    <br>
-    <button type="submit" href="./" class="btn btn-danger" role="button">Cancel</button>
-    <button type="submit" class="btn btn-danger" role="button">Done</button>
-{% end for %}
-</div><br>
-{% endif %}
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="lat">Latitude</label>
+                <textarea class="form-control" id="lat" rows="3" name="lat"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="lng">Latitude</label>
+                <textarea class="form-control" id="lng" rows="3" name="lng"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+</div>
+</div>
 {% endblock %}
