@@ -24,7 +24,7 @@ def view_all_park():
 
 
 @park_crud.route('/<id>/posts')
-def view_all_post():
+def view_all_post(id):
     page = request.args.get('page', None)
     if page:
         page = page.encode('utf-8')
@@ -34,7 +34,7 @@ def view_all_post():
     limit = 10
     offset = skip * 10
     park = park_client.get_by_id(id)
-    posts = post_client.get_batch({}, {'park_id': id}, offset, limit)
+    posts = post_client.get_batch({'park_id': id}, offset, limit)
     return render_template('posts.html', posts=posts, park=park)
 
 

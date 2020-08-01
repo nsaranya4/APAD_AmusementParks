@@ -37,7 +37,7 @@ class PostsResource(Resource):
         if args['tag'] is not None:
             filters['tag'] = args['tag']
         posts = self.post_service.get_batch(offset, limit, filters)
-        return {'posts': posts}, 200
+        return posts, 200
 
     def post(self):
         json_data = request.get_json()
