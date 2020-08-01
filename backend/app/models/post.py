@@ -9,7 +9,6 @@ from .user import User
 
 
 class Post(Document):
-    name = StringField(required=True, unique=True)
     title = StringField(required=True)
     description = StringField(required=True)
     image_id = StringField(required=True)
