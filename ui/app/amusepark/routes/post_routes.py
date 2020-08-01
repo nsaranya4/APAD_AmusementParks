@@ -14,8 +14,8 @@ def view(id):
     return render_template('post.html', post=post)
 
 
-@post_crud.route('/add', methods=['GET', 'POST'])
-def add():
+@post_crud.route('/create', methods=['POST'])
+def create():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
         post_request = CreatePostRequest()
@@ -31,5 +31,4 @@ def add():
         location.lng = data['lng']
         post_request.location = location
         post = post_client.create(post_request)
-        return render_template('post.html', post=post)
-    return render_template('post.html')
+        return redirect(url_for('.view_all_post_of_park', id=post.park.id))

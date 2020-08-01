@@ -10,7 +10,7 @@ post_client = PostClient("http://127.0.0.1:5000")
 
 
 @park_crud.route('/')
-def view_all_park():
+def view_all_parks():
     page = request.args.get('page', None)
     if page:
         page = page.encode('utf-8')
@@ -24,7 +24,7 @@ def view_all_park():
 
 
 @park_crud.route('/<id>/posts')
-def view_all_post(id):
+def view_all_post_of_park(id):
     page = request.args.get('page', None)
     if page:
         page = page.encode('utf-8')
@@ -38,17 +38,23 @@ def view_all_post(id):
     return render_template('posts.html', posts=posts, park=park)
 
 
+@park_crud.route('/<id>/posts/create')
+def create_post(id):
+    park = park_client.get_by_id(id)
+    return render_template('createpost.html', park=park)
+
+
 @park_crud.route('/create', methods=['GET', 'POST'])
-def create():
+def create_park():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
         park_request = CreateParkRequest( name=data['name'],
                                           description=data['description'],
-                                          image_id = 'hardcoded',
-                                          user_id = data['user_id'],
-                                          location = Location(lat=data['lat'], lng=data['lng'])
+                                          image_id='hardcoded',
+                                          user_id=data['user_id'],
+                                          location=Location(lat=data['lat'], lng=data['lng'])
                                           )
         park = park_client.create(park_request)
-        return redirect(url_for('.view_all_park'))
+        return redirect(url_for('.view_all_parks'))
 
     return render_template('createpark.html')
