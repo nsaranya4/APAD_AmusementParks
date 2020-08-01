@@ -11,7 +11,7 @@ class ParkClient:
 
     def create(self, create_park_request):
         payload = self.create_park_request_schema.dump(create_park_request).data
-        headers = {"content-type": "application/json"}
+        headers = {"Content-Type": "application/json", "Accept": "*/*"}
         response = requests.post(self.park_path, data=payload, headers=headers)
         # TODO:: handle error codes
         park = self.park_schema.load(response.json()).data
