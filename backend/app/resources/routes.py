@@ -1,6 +1,6 @@
 from .park_resources import ParkResource, ParksResource
 from .post_resources import PostResource, PostsResource
-from .user_resources import UsersResource
+from .user_resources import UsersResource, UserResource
 from repos.post_repo import PostRepo
 from repos.park_repo import ParkRepo
 from repos.user_repo import UserRepo
@@ -21,3 +21,4 @@ def initialize_routes(api):
     api.add_resource(PostResource, '/funtech/v1/posts/<string:id>', resource_class_kwargs={'post_service': post_service})
     api.add_resource(PostsResource, '/funtech/v1/posts', resource_class_kwargs={'post_service': post_service})
     api.add_resource(UsersResource, '/funtech/v1/users', resource_class_kwargs={'user_service': user_service})
+    api.add_resource(UserResource, '/funtech/v1/users/<string:id>', resource_class_kwargs={'user_service': user_service})
