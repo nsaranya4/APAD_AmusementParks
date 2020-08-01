@@ -9,7 +9,7 @@ user_client = UserClient("http://localhost:5000")
 
 
 @user_crud.route('/<id>/posts')
-def view_all_post_of_user(id):
+def view_posts(id):
     page = request.args.get('page', None)
     if page:
         page = page.encode('utf-8')
