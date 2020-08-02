@@ -15,3 +15,9 @@ class ParkRepo:
     def create(self, park: Park):
         park = park.save()
         return park
+
+    def delete(self, park: Park):
+        park = Park.objects()
+        park.delete()
+        #return park
+
