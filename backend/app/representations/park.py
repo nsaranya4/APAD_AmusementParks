@@ -45,3 +45,5 @@ class CreateParkRequestSchema(Schema):
     @post_load
     def make_create_park_request(self, data, **kwargs):
         return CreateParkRequest(**data)
+
+
