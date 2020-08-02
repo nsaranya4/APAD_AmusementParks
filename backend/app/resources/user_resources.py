@@ -12,6 +12,9 @@ class UserResource(Resource):
         post = self.user_service.get_by_id(id=id)
         return post, 200
 
+    def delete(self, id):
+        user = self.user_service.delete_by_id(id=id)
+
 
 class UsersResource(Resource):
     def __init__(self,  **kwargs):

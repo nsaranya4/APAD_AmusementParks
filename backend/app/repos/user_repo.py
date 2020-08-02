@@ -12,3 +12,7 @@ class UserRepo:
 
       def get_by_email_id(self, email: str):
          return User.objects.get(email=email)
+
+      def delete(self, id: str):
+        user = User.objects(id=id)
+        user.delete()
