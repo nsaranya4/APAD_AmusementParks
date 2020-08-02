@@ -19,3 +19,8 @@ class PostRepo:
     def create(self, post: Post):
         post = post.save()
         return post
+
+    def delete(self, id: str):
+        post = Post.objects(id=id)
+        post.delete()
+        
