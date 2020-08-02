@@ -12,3 +12,7 @@ class SubscriptionRepo:
     def create(self, subscription: Subscription):
         subscription = subscription.save()
         return subscription
+
+    def delete_by_id(self, subscription: Subscription):
+        print("Came here 1")
+        subscription.delete()

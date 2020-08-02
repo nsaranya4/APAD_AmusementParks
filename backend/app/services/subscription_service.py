@@ -23,3 +23,7 @@ class SubscriptionService:
     def get_batch(self, filters):
         subscriptions = self.subscription_repo.get_batch(filters)
         return self.subscriptions_schema.dump(subscriptions).data
+
+    def delete_by_id(self, id):
+        subscription = self.subscription_repo.delete_by_id(id)
+        self.subscription_repo.delete(subscription)
