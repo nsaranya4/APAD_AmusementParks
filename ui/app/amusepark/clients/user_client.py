@@ -35,13 +35,6 @@ class UserClient:
         return user
 
     def create_subscription(self, create_subscription_request):
-        data = self.create_subscription_request_schema.dump(create_subscription_request).data
-        response = requests.post(self.subscription_path, json=data, headers=self.headers)
-        # TODO:: handle error codes
-        user = self.subscriptions_schema.load(response.json()).data
-        return user
-
-    def create_subscription(self, create_subscription_request):
         payload = self.create_subscription_request_schema.dump(create_subscription_request).data
         response = requests.post(self.subscription_path, json=payload, headers=self.headers)
         # TODO:: handle error codes
