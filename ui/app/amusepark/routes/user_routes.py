@@ -25,14 +25,6 @@ def view_posts(id):
 
 @user_crud.route('/<id>/subscriptions')
 def view_subscriptions(id):
-    page = request.args.get('page', None)
-    if page:
-        page = page.encode('utf-8')
-        skip = int(page)
-    else:
-        skip = 0
-    limit = 10
-    offset = skip * 10
     user = user_client.get_by_id(id)
-    parks = user_client.get_subscriptions('5f22fb4d98e1155012889b59')
+    parks = user_client.get_subscriptions(user.id)
     return render_template('mysubscriptions.html', parks=parks, user=user)
