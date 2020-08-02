@@ -13,6 +13,9 @@ class PostResource(Resource):
         post = self.post_service.get_by_id(id=id)
         return post, 200
 
+    def delete(self, id):
+        post = self.post_service.delete_by_id(id=id)
+        
 
 class PostsResource(Resource):
     def __init__(self,  **kwargs):
