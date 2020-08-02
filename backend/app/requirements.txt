@@ -3,3 +3,4 @@ Flask-RESTful==0.3.8
 Flask-MongoEngine==0.9.5
 marshmallow==2.20.0
 mongoengine==0.20.0
+dnspython==2.0.0
