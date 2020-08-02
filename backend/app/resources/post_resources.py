@@ -4,7 +4,6 @@ from resources.errors import InternalServerError
 from representations.post import CreatePostRequestSchema
 
 
-
 class PostResource(Resource):
     def __init__(self, **kwargs):
         self.post_service = kwargs['post_service']

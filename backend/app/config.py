@@ -6,7 +6,7 @@ class BaseConfig(object):
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     TESTING = True
-    MONGODB_DB = 'otherdb'
+    MONGODB_DB = 'funtech'
     MONGODB_HOST = '127.0.0.1'
 
 
