@@ -12,9 +12,9 @@ class ParkResource(Resource):
         park = self.park_service.get_by_id(id)
         return park, 200
     
-    def delete(self,id: str):
-        park = self.park_service.delete_by_id(id)
-        #return park, 200
+    def delete(self, id: str):
+        self.park_service.delete_by_id(id)
+        return None, 204
 
 
 class ParksResource(Resource):
@@ -51,5 +51,3 @@ class ParksResource(Resource):
             return park, 200
         except Exception:
             raise InternalServerError
-    
-    

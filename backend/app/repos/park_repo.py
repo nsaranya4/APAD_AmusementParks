@@ -17,7 +17,4 @@ class ParkRepo:
         return park
 
     def delete(self, park: Park):
-        park = Park.objects()
         park.delete()
-        #return park
-

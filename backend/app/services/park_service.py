@@ -35,5 +35,5 @@ class ParkService:
         return self.park_schema.dump(park).data
 
     def delete_by_id(self, id):
-        park = self.park_repo.delete(id)
-        #return self.park_schema.dump(park).data
+        park = self.park_repo.get_by_id(id)
+        self.park_repo.delete(park)
