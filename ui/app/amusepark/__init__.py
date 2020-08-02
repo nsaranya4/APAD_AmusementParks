@@ -1,23 +1,40 @@
 import os
-from flask import Flask, redirect, url_for
+from flask import Flask
+from .routes.park_routes import construct_park_blueprint
+from .routes.post_routes import construct_post_blueprint
+from .routes.user_routes import construct_user_blueprint
+from .routes.subscription_route import construct_subscription_blueprint
+from .clients.park_client import ParkClient
+from .clients.post_client import PostClient
+from .clients.user_client import UserClient
 
 
 def create_app():
+    config = {
+        "development": "config.DevelopmentConfig",
+        "production": "config.ProductionConfig",
+    }
+    config_name = os.getenv('ENVIRONMENT', 'development')
     app = Flask(__package__)
+    app.config.from_object(config[config_name])
 
     # Set the secret key to some random bytes
     app.secret_key = os.urandom(16)
+    backend_url = app.config['BACKEND_URL']
+    park_client = ParkClient(backend_url)
+    post_client = PostClient(backend_url)
+    user_client = UserClient(backend_url)
 
-    from .routes.user_routes import user_crud
+    user_crud = construct_user_blueprint(user_client, post_client)
     app.register_blueprint(user_crud, url_prefix='/users')
 
-    from .routes.post_routes import post_crud
+    post_crud = construct_post_blueprint(post_client)
     app.register_blueprint(post_crud, url_prefix='/posts')
 
-    from .routes.park_routes import park_crud
+    park_crud = construct_park_blueprint(park_client, post_client)
     app.register_blueprint(park_crud, url_prefix='/parks')
 
-    from .routes.subscription_route import subscription_crud
+    subscription_crud = construct_subscription_blueprint(user_client)
     app.register_blueprint(subscription_crud, url_prefix='/subscriptions')
 
     return app
