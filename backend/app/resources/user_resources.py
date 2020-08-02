@@ -14,6 +14,7 @@ class UserResource(Resource):
 
     def delete(self, id):
         user = self.user_service.delete_by_id(id=id)
+        return None, 204
 
 
 class UsersResource(Resource):

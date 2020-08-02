@@ -26,5 +26,5 @@ class UserService:
         return self.user_schema.dump(user).data
 
     def delete_by_id(self, id):
-        user = self.user_repo.delete(id)
-
+        user = self.user_repo.get_by_id(id)
+        self.user_repo.delete(user)

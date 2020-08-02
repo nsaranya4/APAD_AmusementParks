@@ -24,6 +24,6 @@ class SubscriptionService:
         subscriptions = self.subscription_repo.get_batch(filters)
         return self.subscriptions_schema.dump(subscriptions).data
 
-    def delete_by_id(self, id):
-        subscription = self.subscription_repo.delete_by_id(id)
+    def delete_by_id(self, id: str):
+        subscription = self.subscription_repo.get_by_id(id)
         self.subscription_repo.delete(subscription)

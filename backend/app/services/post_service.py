@@ -39,5 +39,5 @@ class PostService:
         return self.post_schema.dump(post).data
 
     def delete_by_id(self, id):
-        post = self.post_repo.delete(id)
-        
+        post = self.post_repo.get_by_id(id)
+        self.post_repo.delete(post)

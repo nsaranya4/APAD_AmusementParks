@@ -15,7 +15,8 @@ class PostResource(Resource):
 
     def delete(self, id):
         post = self.post_service.delete_by_id(id=id)
-        
+        return None, 204
+
 
 class PostsResource(Resource):
     def __init__(self,  **kwargs):

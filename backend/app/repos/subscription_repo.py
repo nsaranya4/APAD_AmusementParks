@@ -3,6 +3,9 @@ from models.subscription import Subscription
 
 class SubscriptionRepo:
 
+    def get_by_id(self, id: str):
+        return Subscription.objects.get(id=id)
+
     def get_batch(self, filters: dict):
         subscription_list = Subscription.objects
         if filters.keys().__contains__('user_id'):
@@ -14,5 +17,4 @@ class SubscriptionRepo:
         return subscription
 
     def delete_by_id(self, subscription: Subscription):
-        print("Came here 1")
         subscription.delete()
