@@ -26,5 +26,8 @@ def view_posts(id):
 @user_crud.route('/<id>/subscriptions')
 def view_subscriptions(id):
     user = user_client.get_by_id(id)
-    parks = user_client.get_subscriptions(user.id)
+    subscriptions = user_client.get_subscriptions(user.id)
+    parks = []
+    for subscription in subscriptions:
+        parks.append(subscription.park)
     return render_template('mysubscriptions.html', parks=parks, user=user)
