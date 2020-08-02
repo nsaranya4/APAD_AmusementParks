@@ -12,6 +12,10 @@ class SubscriptionsResource(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('user_id', type=str)
 
+    def delete(self, id: str):
+        self.subscription_service.delete_by_id(id)
+        return None, 204
+
     def get(self):
         args = self.reqparse.parse_args()
         filters = {}
