@@ -16,5 +16,5 @@ class SubscriptionRepo:
         subscription = subscription.save()
         return subscription
 
-    def delete_by_id(self, subscription: Subscription):
+    def delete(self, subscription: Subscription):
         subscription.delete()

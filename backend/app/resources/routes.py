@@ -1,7 +1,7 @@
 from .park_resources import ParkResource, ParksResource
 from .post_resources import PostResource, PostsResource
 from .user_resources import UsersResource, UserResource
-from .subscription_resource import SubscriptionsResource
+from .subscription_resource import SubscriptionsResource, SubscriptionResource
 from repos.post_repo import PostRepo
 from repos.park_repo import ParkRepo
 from repos.user_repo import UserRepo
@@ -28,3 +28,4 @@ def initialize_routes(api):
     api.add_resource(UsersResource, '/funtech/v1/users', resource_class_kwargs={'user_service': user_service})
     api.add_resource(UserResource, '/funtech/v1/users/<string:id>', resource_class_kwargs={'user_service': user_service})
     api.add_resource(SubscriptionsResource, '/funtech/v1/subscriptions', resource_class_kwargs={'subscription_service': subscription_service})
+    api.add_resource(SubscriptionResource, '/funtech/v1/subscriptions/<string:id>', resource_class_kwargs={'subscription_service': subscription_service})
