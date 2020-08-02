@@ -23,11 +23,15 @@
               <p class="card-text">{{ park.description }}</p>
               <p class="card-text">{{ park.user.name }}</p>
 
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">subscribe</button>
+              <form method="POST"  action="/subscriptions/create">
+                <div class="d-flex justify-content-between align-items-center">
+                  <input type="hidden" name="park_id" id="park_id" value="{{ park.id }}"/>
+                  <input type="hidden" name="user_id" value="5f22fb4d98e1155012889b59"/>
+                  <div class="btn-group">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">subscribe</button>
+                  </div>
                 </div>
-              </div>
+              </form>
 
             </div>
           </div>
