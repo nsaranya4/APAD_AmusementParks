@@ -24,6 +24,21 @@ def construct_post_blueprint(post_client):
         posts = post_client.get_batch({'tag': tag}, offset, limit)
         return render_template('myposts.html', posts=posts)
 
+    @post_crud.route('/tag', methods=['POST'])
+    def view_posts_with_tag():
+        data = request.form.to_dict(flat=True)
+        tag = data['searchtext']
+        page = request.args.get('page', None)
+        if page:
+            page = page.encode('utf-8')
+            skip = int(page)
+        else:
+            skip = 0
+        limit = 10
+        offset = skip * 10
+        posts = post_client.get_batch({'tag': tag}, offset, limit)
+        return render_template('myposts.html', posts=posts)
+
     @post_crud.route('/create', methods=['POST'])
     def create():
         if request.method == 'POST':
