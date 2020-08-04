@@ -22,7 +22,7 @@
         <form method="POST"  action="/posts/create">
             <!-- Somehow make the user object reach here -->
             <input type="hidden" name="park_id" id="park_id" value="{{ park.id }}"/>
-            <input type="hidden" name="user_id" value="5f270f6c7927018b7c37646c"/>
+            <input type="hidden" name="user_id" value="{{user.id}}"/>
             <div class="form-group">
               <label for="title">Title</label>
               <input type="text" class="form-control" id="title"  placeholder="Enter Post Title" name="title" required>
