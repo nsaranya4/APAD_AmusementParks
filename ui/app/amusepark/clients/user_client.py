@@ -30,9 +30,11 @@ class UserClient:
     def get_by_email_id(self, email_id):
         params = {'email': email_id}
         response = requests.get(self.user_path, params=params)
-        #TODO:: handle error codes
-        user = self.user_schema.load(response.json()).data
-        return user
+        if response.status_code == 404:
+            return None
+        else:
+            user = self.user_schema.load(response.json()).data
+            return user
 
     def create_subscription(self, create_subscription_request):
         payload = self.create_subscription_request_schema.dump(create_subscription_request).data

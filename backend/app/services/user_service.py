@@ -18,8 +18,11 @@ class UserService:
         return self.user_schema.dump(user).data
 
     def get_by_email_id(self, email):
-        user = self.user_repo.get_by_email_id(email)
-        return self.user_schema.dump(user).data
+        user, error = self.user_repo.get_by_email_id(email)
+        if user is not None:
+            return self.user_schema.dump(user).data, None
+        else:
+            return None, None
 
     def get_by_id(self, id):
         user = self.user_repo.get_by_id(id)

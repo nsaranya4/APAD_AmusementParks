@@ -27,8 +27,13 @@ class UsersResource(Resource):
     def get(self):
         args = self.reqparse.parse_args()
         email = args['email']
-        user = self.user_service.get_by_email_id(email)
-        return user, 200
+        user, error = self.user_service.get_by_email_id(email)
+        if error is not None:
+            return None, 500
+        elif user is None:
+            return None, 404
+        else:
+            return user, 200
 
     def post(self):
         json_data = request.get_json()

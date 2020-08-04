@@ -11,7 +11,13 @@ class UserRepo:
          return User.objects.get(id=id)
 
       def get_by_email_id(self, email: str):
-         return User.objects.get(email=email)
+          try:
+              user = User.objects.get(email=email)
+              return user, None
+          #TODO:: fix this
+          except Exception as e:
+              return None, None
+
 
       def delete(self, user: User):
         user.delete()
