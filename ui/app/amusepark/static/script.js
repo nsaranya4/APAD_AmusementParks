@@ -2,10 +2,16 @@ window.addEventListener('load', function () {
   document.getElementById('sign-out').onclick = function () {
     firebase.auth().signOut();
   };
+  signbtn = document.getElementById('sign-out-only')
+  if (signbtn) {
+      document.getElementById('sign-out-only').onclick = function () {
+      firebase.auth().signOut();
+    };
+  }
 
   // FirebaseUI config.
   var uiConfig = {
-    signInSuccessUrl: '/',
+    signInSuccessUrl: '/login/other',
     signInOptions: [
       // Comment out any lines corresponding to providers you did not check in
       // the Firebase console.
@@ -24,8 +30,15 @@ window.addEventListener('load', function () {
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       // User is signed in, so display the "sign out" button and login info.
+      // document.getElementById('sign-in').hidden = true;
       document.getElementById('sign-out').hidden = false;
-      document.getElementById('login-info').hidden = false;
+      if (document.getElementById('sign-out-only')) {
+        document.getElementById('sign-out-only').hidden = false;
+      }
+      login = document.getElementById('login-info')
+      if (login) {
+        login.hidden = false;
+      }
       console.log(`Signed in as ${user.displayName} (${user.email})`);
       user.getIdToken().then(function (token) {
         // Add the token to the browser's cookies. The server will then be
@@ -42,8 +55,15 @@ window.addEventListener('load', function () {
       // Show the Firebase login button.
       ui.start('#firebaseui-auth-container', uiConfig);
       // Update the login state indicators.
+      // document.getElementById('sign-in').hidden = false;
       document.getElementById('sign-out').hidden = true;
-      document.getElementById('login-info').hidden = true;
+      if (document.getElementById('sign-out-only')) {
+        document.getElementById('sign-out-only').hidden = true;
+      }
+      login = document.getElementById('login-info')
+      if (login) {
+        login.hidden = true;
+      }
       // Clear the token cookie.
       document.cookie = "token=";
     }

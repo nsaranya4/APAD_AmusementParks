@@ -7,6 +7,7 @@ def construct_auth_blueprint(user_client):
     auth_crud = Blueprint('auth', __name__)
 
     @auth_crud.route('/login', defaults={'page': 'index'})
+    @auth_crud.route('/login/<page>', methods=['GET'])
     def login(page):
         time = None
         error_message = None
@@ -24,8 +25,11 @@ def construct_auth_blueprint(user_client):
             if request.cookies.get('token'):
                 redir.set_cookie('token', request.cookies.get('token'))
             return redir
-        else:
-            return redirect(url_for('.login'))
+
+        if page == 'index':
+            return render_template(
+                'index.html',
+                user_data=claims, error_message=error_message, times=time)
 
     @auth_crud.route('/logout')
     def logout():
