@@ -10,15 +10,23 @@
     <h6 style=text-align:left>Posts</h6>
     <div class="row">
         {% for post in posts %}
-        <div class="col-md-8">
+        <div class="col-md-12">
         <a style="text-align:left;" href="#" class="btn btn-default btn-lg" role="link" hidden="true">Prev report</a>
 
             <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
-                    <strong class="d-inline-block mb-2 text-primary">Tags</strong>
                     <h3 class="mb-0">{{ post.title }}</h3>
                     <div class="mb-1 text-muted">{{ post.name }}</div>
                     <p class="card-text mb-auto">{{ post.description }}</p>
+                    <p class="card-text mb-auto">
+                        <ul>
+                          {% for tag in post.tags %}
+                            <li  style="display:inline-block;" class="align-items-left">
+                              <a href="#">#{{tag}}  </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                    </p>
                 </div>
                 <div class="col-auto d-none d-lg-block">
                     <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
