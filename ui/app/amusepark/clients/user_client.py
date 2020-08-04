@@ -28,7 +28,7 @@ class UserClient:
         return user
 
     def get_by_email_id(self, email_id):
-        params = {'email_id': email_id}
+        params = {'email': email_id}
         response = requests.get(self.user_path, params=params)
         #TODO:: handle error codes
         user = self.user_schema.load(response.json()).data
