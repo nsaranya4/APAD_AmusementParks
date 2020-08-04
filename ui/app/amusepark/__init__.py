@@ -1,9 +1,10 @@
 import os
-from flask import Flask
+from flask import Flask, redirect, url_for
 from .routes.park_routes import construct_park_blueprint
 from .routes.post_routes import construct_post_blueprint
 from .routes.user_routes import construct_user_blueprint
 from .routes.subscription_route import construct_subscription_blueprint
+from .routes.auth_routes import construct_auth_blueprint
 from .clients.park_client import ParkClient
 from .clients.post_client import PostClient
 from .clients.user_client import UserClient
@@ -36,5 +37,12 @@ def create_app():
 
     subscription_crud = construct_subscription_blueprint(user_client)
     app.register_blueprint(subscription_crud, url_prefix='/subscriptions')
+
+    auth_crud = construct_auth_blueprint(user_client)
+    app.register_blueprint(auth_crud, url_prefix='/')
+
+    @app.route('/')
+    def index():
+        return redirect(url_for('auth.login'))
 
     return app

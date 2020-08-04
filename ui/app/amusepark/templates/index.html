@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+    <div class="container">
+      <div class="content-wrapper bg-white p-5 m-5 align-middle">
+          <h1 class="py-5">Amusement Parks</h1>
+          <div id="firebaseui-auth-container"></div>
+          <button id="sign-out-only" href="/logout" hidden=true>Sign out</button>
+
+          <div id="login-info">
+            <h2>Last login:</h2>
+            {% if times %}
+              <p>{{ times }} </p>
+            {% elif error_message %}
+              <p>Error: {{ error_message }}</p>
+            {% endif %}
+          </div>
+    </div>
+{% endblock %}
