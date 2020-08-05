@@ -7,10 +7,7 @@
           <button id="sign-out" href="/logout" hidden=true>Sign out</button>
 
           <div id="login-info">
-            <h2>Last login:</h2>
-            {% if times %}
-              <p>{{ times }} </p>
-            {% elif error_message %}
+            {% if error_message %}
               <p>Error: {{ error_message }}</p>
             {% endif %}
           </div>

@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, request, url_for
 from ..representations.subscription import CreateSubscriptionRequest
+from .auth import verify_auth
 
 
 def construct_subscription_blueprint(user_client):
@@ -7,6 +8,11 @@ def construct_subscription_blueprint(user_client):
 
     @subscription_crud.route('/create', methods=['POST'])
     def create():
+        # check user login
+        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        if claims == None or error_message != None:
+            return redirect(url_for('auth.login'))
+
         if request.method == 'POST':
             data = request.form.to_dict(flat=True)
             user_id = data['user_id']

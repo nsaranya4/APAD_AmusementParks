@@ -29,10 +29,10 @@ def create_app():
     user_crud = construct_user_blueprint(user_client, post_client)
     app.register_blueprint(user_crud, url_prefix='/users')
 
-    post_crud = construct_post_blueprint(post_client)
+    post_crud = construct_post_blueprint(user_client, post_client)
     app.register_blueprint(post_crud, url_prefix='/posts')
 
-    park_crud = construct_park_blueprint(park_client, post_client)
+    park_crud = construct_park_blueprint(user_client, park_client, post_client)
     app.register_blueprint(park_crud, url_prefix='/parks')
 
     subscription_crud = construct_subscription_blueprint(user_client)
