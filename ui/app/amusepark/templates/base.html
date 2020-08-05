@@ -71,65 +71,13 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-
-  <header>
-  <div class="collapse bg-dark" id="navbarHeader">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
-          <h4 class="text-white">About</h4>
-          <p class="text-muted"> Place holder</p>
-        </div>
-        <div class="col-sm-4 offset-md-1 py-4">
-          <h4 class="text-white">User Summary</h4>
-        </div>
+    {% block body %}{% endblock %}
+    <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+        </p>
       </div>
-    </div>
-  </div>
-
-  <div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container d-flex justify-content-between">
-        <a href="/users/{{user.id}}/posts" class="navbar-brand d-flex align-items-center">
-        <strong>My Posts</strong>
-      </a>
-      <a href="/users/{{user.id}}/subscriptions" class="navbar-brand d-flex align-items-center">
-        <strong>My Subscriptions</strong>
-      </a>
-      <a href="/parks/create" class="navbar-brand d-flex align-items-center">
-        <strong>Create Park</strong>
-      </a>
-      <a href="/parks" class="navbar-brand d-flex align-items-center">
-        <strong>Parks</strong>
-      </a>
-        <a class="navbar-brand d-flex align-items-center">
-        <div class="container">
-          <div class="row">
-            <form class="form-inline my-2 my-lg-0" action="/posts/tag" method="POST">
-              <input class="form-control mr-sm-2" id="searchtext" name="searchtext" type="text" placeholder="Search for tags" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-        </a>
-
-
-
-    </div>
-  </div>
-</header>
-  {% block body %}{% endblock %}
-
-
-<footer class="text-muted">
-  <div class="container">
-    <p class="float-right">
-      <a href="#">Back to top</a>
-    </p>
-  </div>
-</footer>
-
-
-
-
+    </footer>
 </body>
 </html>
