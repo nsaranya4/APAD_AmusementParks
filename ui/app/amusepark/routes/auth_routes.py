@@ -18,7 +18,7 @@ def construct_auth_blueprint(user_client):
                                                         image_id='hardcode',
                                                         role='admin')
                 user = user_client.create(create_user_request)
-            redir = redirect(url_for('user.view_subscriptions', id=str(user.id)), user=user)
+            redir = redirect(url_for('user.view_subscriptions', id=str(user.id)))
             if request.cookies.get('token'):
                 redir.set_cookie('token', request.cookies.get('token'))
             return redir

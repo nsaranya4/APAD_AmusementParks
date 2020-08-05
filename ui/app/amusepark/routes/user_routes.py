@@ -21,7 +21,6 @@ def construct_user_blueprint(user_client, post_client):
             skip = 0
         limit = 10
         offset = skip * 10
-        user = user_client.get_by_id(id)
         posts = post_client.get_batch({'user_id': id}, offset, limit)
         return render_template('myposts.html', posts=posts, user=user)
 
@@ -32,9 +31,7 @@ def construct_user_blueprint(user_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
-        user = user_client.get_by_id(id)
-        subscriptions = user_client.get_subscriptions(user.id)
+        subscriptions = user_client.get_subscriptions(id)
         parks = []
         for subscription in subscriptions:
             parks.append(subscription.park)

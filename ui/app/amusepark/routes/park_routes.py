@@ -73,7 +73,7 @@ def construct_park_blueprint(user_client, park_client, post_client):
                                              user_id=data['user_id'],
                                              location=Location(lat=data['lat'], lng=data['lng']))
             park = park_client.create(park_request)
-            return redirect(url_for('.view_parks'), user=user)
+            return redirect(url_for('.view_parks'))
         return render_template('createpark.html', user=user)
 
     return park_crud

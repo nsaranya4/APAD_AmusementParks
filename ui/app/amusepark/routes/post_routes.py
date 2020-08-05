@@ -77,6 +77,6 @@ def construct_post_blueprint(user_client, post_client):
                                              location=Location(lat=data['lat'], lng=data['lng']),
                                              tags=tags)
             post = post_client.create(post_request)
-            return redirect(url_for('park.view_posts', id=str(post.park.id)), user=user)
+            return redirect(url_for('park.view_posts', id=str(post.park.id)))
 
     return post_crud
