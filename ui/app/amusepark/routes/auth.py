@@ -1,15 +1,13 @@
 import re
 from google.auth.transport import requests
 import google.oauth2.id_token
-from flask import redirect, url_for
-
-firebase_request_adapter = requests.Request()
 
 
 # We have taken this code from sampleProject
 def verify_auth(id_token):
     error_message = None
     claims = None
+    firebase_request_adapter = requests.Request()
     if id_token:
         try:
             claims = google.oauth2.id_token.verify_firebase_token(

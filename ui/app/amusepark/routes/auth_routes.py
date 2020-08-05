@@ -9,10 +9,7 @@ def construct_auth_blueprint(user_client):
     @auth_crud.route('/login', defaults={'page': 'index'})
     @auth_crud.route('/login/<page>', methods=['GET'])
     def login(page):
-        time = None
-        error_message = None
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        print('login route', claims, error_message)
         if claims != None and error_message == None:
             user = user_client.get_by_email_id(claims['email'])
             if user == None:
@@ -21,7 +18,7 @@ def construct_auth_blueprint(user_client):
                                                         image_id='hardcode',
                                                         role='admin')
                 user = user_client.create(create_user_request)
-            redir = redirect(url_for('user.view_subscriptions', id=str(user.id)))
+            redir = redirect(url_for('user.view_subscriptions', id=str(user.id)), user=user)
             if request.cookies.get('token'):
                 redir.set_cookie('token', request.cookies.get('token'))
             return redir
@@ -29,7 +26,7 @@ def construct_auth_blueprint(user_client):
         if page == 'index':
             return render_template(
                 'index.html',
-                user_data=claims, error_message=error_message, times=time)
+                user_data=claims, error_message=error_message)
 
     @auth_crud.route('/logout')
     def logout():
