@@ -20,7 +20,6 @@ def construct_park_blueprint(user_client, park_client, post_client):
         subscriptions = user_client.get_subscriptions(user.id)
         park_subscription_map = {}
         for subscription in subscriptions:
-            parks.append(subscription.park)
             park_subscription_map[subscription.park.id] = subscription.id
         if len(parks) < limit:
             more = False
