@@ -1,0 +1,15 @@
+{% if page >= 0 %}
+<nav>
+  <ul class="pager">
+    <li><a href="?page={{ page-1 }}">Prev</a></li>
+  </ul>
+</nav>
+{% endif %}
+
+{% if more %}
+<nav>
+  <ul class="pager">
+    <li><a href="?page={{ page+1 }}">Next</a></li>
+  </ul>
+</nav>
+{% endif %}
