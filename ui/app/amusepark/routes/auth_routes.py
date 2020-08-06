@@ -3,6 +3,7 @@ from .auth import verify_auth
 from ..representations.user import CreateUserRequest
 
 
+# This code is written by using SampleProject as reference
 def construct_auth_blueprint(user_client):
     auth_crud = Blueprint('auth', __name__)
 
@@ -18,15 +19,17 @@ def construct_auth_blueprint(user_client):
                                                         image_id='hardcode',
                                                         role='admin')
                 user = user_client.create(create_user_request)
-            redir = redirect(url_for('user.view_subscriptions', id=str(user.id)))
-            if request.cookies.get('token'):
-                redir.set_cookie('token', request.cookies.get('token'))
-            return redir
 
         if page == 'index':
             return render_template(
                 'index.html',
                 user_data=claims, error_message=error_message)
+        else:
+            redir = redirect(url_for('user.view_subscriptions', id=str(user.id)))
+            if request.cookies.get('token'):
+                redir.set_cookie('token', request.cookies.get('token'))
+            return redir
+
 
     @auth_crud.route('/logout')
     def logout():
