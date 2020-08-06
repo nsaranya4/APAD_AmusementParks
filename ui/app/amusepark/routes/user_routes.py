@@ -33,8 +33,10 @@ def construct_user_blueprint(user_client, post_client):
         user = user_client.get_by_email_id(claims['email'])
         subscriptions = user_client.get_subscriptions(id)
         parks = []
+        park_subscription_map = {}
         for subscription in subscriptions:
             parks.append(subscription.park)
-        return render_template('mysubscriptions.html', parks=parks, user=user)
+            park_subscription_map[subscription.park.id] = subscription.id
+        return render_template('mysubscriptions.html', parks=parks, user=user, park_subscription_map=park_subscription_map)
 
     return user_crud

@@ -36,6 +36,7 @@ class UserClient:
             user = self.user_schema.load(response.json()).data
             return user
 
+    #TODO have a separate subscription client
     def create_subscription(self, create_subscription_request):
         payload = self.create_subscription_request_schema.dump(create_subscription_request).data
         response = requests.post(self.subscription_path, json=payload, headers=self.headers)
@@ -43,9 +44,18 @@ class UserClient:
         subscription = self.subscription_schema.load(response.json()).data
         return subscription
 
+    # TODO have a separate subscription client
     def get_subscriptions(self, user_id):
         params = {'user_id': user_id}
         response = requests.get(self.subscription_path, params=params)
         #TODO:: handle error codes
         subscriptions = self.subscriptions_schema.load(response.json()).data
         return subscriptions
+
+    # TODO have a separate subscription client
+    def delete_subscription(self, subscription_id):
+        response = requests.delete(self.subscription_path + "/" + subscription_id)
+        if response.status_code == 204:
+            return None
+        else:
+            return Exception
