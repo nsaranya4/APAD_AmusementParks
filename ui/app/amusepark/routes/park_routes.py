@@ -40,11 +40,11 @@ def construct_park_blueprint(user_client, park_client, post_client):
             skip = int(page)
         else:
             skip = 0
-        limit = 10
-        offset = skip * 10
+        limit = 2
+        offset = skip * limit
         park = park_client.get_by_id(id)
         posts = post_client.get_batch({'park_id': id}, offset, limit)
-        if len(posts) < 10:
+        if len(posts) < limit:
             more = False
         else:
             more = True
