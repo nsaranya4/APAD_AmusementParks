@@ -3,7 +3,7 @@ from google.auth.transport import requests
 import google.oauth2.id_token
 
 
-# We have taken this code from sampleProject
+# This code is written by using SampleProject as reference
 def verify_auth(id_token):
     error_message = None
     claims = None

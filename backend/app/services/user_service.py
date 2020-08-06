@@ -1,6 +1,7 @@
 from representations.user import UserSchema, CreateUserRequest
 from repos.user_repo import UserRepo
 from models.user import User
+from resources.errors import BadRequestError
 
 
 class UserService:
@@ -22,12 +23,21 @@ class UserService:
         if user is not None:
             return self.user_schema.dump(user).data, None
         else:
-            return None, None
+            return None, error
 
     def get_by_id(self, id):
-        user = self.user_repo.get_by_id(id)
-        return self.user_schema.dump(user).data
+        user, error = self.user_repo.get_by_id(id)
+        if user is not None:
+            return self.user_schema.dump(user).data, None
+        else:
+            return None, error
 
     def delete_by_id(self, id):
-        user = self.user_repo.get_by_id(id)
-        self.user_repo.delete(user)
+        user, error = self.user_repo.get_by_id(id)
+        if user is not None and error is None:
+            return self.user_repo.delete(user), None
+        elif user is None and error is not None:
+            return None, BadRequestError
+        else:
+            return None, error
+
