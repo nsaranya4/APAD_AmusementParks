@@ -39,7 +39,10 @@ class SubscriptionsResource(Resource):
             return errors, 400
 
         try:
-            subscription = self.subscription_service.create(create_subscription_request)
-            return subscription, 200
+            subscription, error = self.subscription_service.create(create_subscription_request)
+            if error is not None:
+                return None, 500
+            else:
+                return subscription, 200
         except Exception:
             raise InternalServerError
