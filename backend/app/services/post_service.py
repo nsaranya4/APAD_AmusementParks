@@ -15,7 +15,7 @@ class PostService:
 
     def create(self, create_post_request: CreatePostRequest):
         park = self.park_repo.get_by_id(create_post_request.park_id)
-        user = self.user_repo.get_by_id(create_post_request.user_id)
+        user, error = self.user_repo.get_by_id(create_post_request.user_id)
         post = Post()
         location = Location()
         location.lat = create_post_request.location.lat

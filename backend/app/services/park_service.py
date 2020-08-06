@@ -13,7 +13,7 @@ class ParkService:
         self.parks_schema = ParkSchema(many=True)
 
     def create(self, create_park_request: CreateParkRequest):
-        user = self.user_repo.get_by_id(create_park_request.user_id)
+        user, error = self.user_repo.get_by_id(create_park_request.user_id)
         park = Park()
         location = Location()
         location.lat = create_park_request.location.lat

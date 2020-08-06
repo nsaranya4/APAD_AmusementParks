@@ -16,9 +16,11 @@ class SubscriptionService:
     def create(self, create_subscription_request: CreateSubscriptionRequest):
         park = self.park_repo.get_by_id(create_subscription_request.park_id)
         user, error = self.user_repo.get_by_id(create_subscription_request.user_id)
+        if error is not None:
+            return None, error
         subscription = Subscription(park=park, user=user)
         subscription = self.subscription_repo.create(subscription)
-        return self.subscription_schema.dump(subscription).data
+        return self.subscription_schema.dump(subscription).data, None
 
     def get_batch(self, filters):
         subscriptions = self.subscription_repo.get_batch(filters)
