@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.park import CreateParkRequest
 from ..representations.location import Location
 from .auth import verify_auth
+from .pagination import pagination
 
 
 def construct_park_blueprint(user_client, park_client, post_client):
@@ -14,22 +15,18 @@ def construct_park_blueprint(user_client, park_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
-        page = request.args.get('page', None)
-        if page:
-            page = page.encode('utf-8')
-            skip = int(page)
-        else:
-            skip = 0
-        limit = 10
-        offset = skip * 10
+        page, offset, limit = pagination(request)
         parks = park_client.get_batch({}, offset, limit)
         subscriptions = user_client.get_subscriptions(user.id)
         park_subscription_map = {}
         for subscription in subscriptions:
-            parks.append(subscription.park)
             park_subscription_map[subscription.park.id] = subscription.id
-        return render_template('parks.html', parks=parks, user=user, park_subscription_map=park_subscription_map)
+        if len(parks) < limit:
+            more = False
+        else:
+            more = True
+        return render_template('parks.html', parks=parks, user=user, park_subscription_map=park_subscription_map, page=page, more=more)
+
 
     @park_crud.route('/<id>/posts')
     def view_posts(id):
@@ -39,21 +36,15 @@ def construct_park_blueprint(user_client, park_client, post_client):
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
 
-        page = request.args.get('page', None)
-        if page:
-            page = page.encode('utf-8')
-            skip = int(page)
-        else:
-            skip = 0
-        limit = 2
-        offset = skip * limit
+        page, offset, limit = pagination(request)
+
         park = park_client.get_by_id(id)
         posts = post_client.get_batch({'park_id': id}, offset, limit)
         if len(posts) < limit:
             more = False
         else:
             more = True
-        return render_template('posts.html', posts=posts, park=park, user=user, page=skip, more=more)
+        return render_template('posts.html', posts=posts, park=park, user=user, page=page, more=more)
 
     @park_crud.route('/<id>/posts/create')
     def create_post(id):
