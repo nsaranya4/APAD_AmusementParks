@@ -24,7 +24,12 @@ def construct_park_blueprint(user_client, park_client, post_client):
         limit = 10
         offset = skip * 10
         parks = park_client.get_batch({}, offset, limit)
-        return render_template('parks.html', parks=parks, user=user)
+        subscriptions = user_client.get_subscriptions(user.id)
+        park_subscription_map = {}
+        for subscription in subscriptions:
+            parks.append(subscription.park)
+            park_subscription_map[subscription.park.id] = subscription.id
+        return render_template('parks.html', parks=parks, user=user, park_subscription_map=park_subscription_map)
 
     @park_crud.route('/<id>/posts')
     def view_posts(id):
