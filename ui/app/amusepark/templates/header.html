@@ -1,16 +1,16 @@
 <header>
   <div class="navbar fixed-top navbar-dark bg-dark shadow-sm">
     <div class="container d-flex justify-content-between">
-        <a href="/users/{{user.id}}/posts" class="navbar-brand d-flex align-items-center">
+        <a href="/users/{{user.id}}/posts" class="navbar-brand d-flex align-items-center {%if current_page == 'myposts' %} active {% endif %}">
         <strong>My Posts</strong>
       </a>
-      <a href="/users/{{user.id}}/subscriptions" class="navbar-brand d-flex align-items-center">
+      <a href="/users/{{user.id}}/subscriptions" class="navbar-brand d-flex align-items-center {%if current_page == 'mysubscriptions' %} active {% endif %}">
         <strong>My Subscriptions</strong>
       </a>
-      <a href="/parks/create" class="navbar-brand d-flex align-items-center">
+      <a href="/parks/create" class="navbar-brand d-flex align-items-center {%if current_page == 'createpark' %} active {% endif %}">
         <strong>Create Park</strong>
       </a>
-      <a href="/parks" class="navbar-brand d-flex align-items-center">
+      <a href="/parks" class="navbar-brand d-flex align-items-center {%if current_page == 'viewparks' %} active {% endif %}">
         <strong>Parks</strong>
       </a>
 
