@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from .auth import verify_auth
-from .pagination import pagination
+from .pagination import pagination, more_pages
 
 
 def construct_user_blueprint(user_client, post_client):
@@ -15,10 +15,7 @@ def construct_user_blueprint(user_client, post_client):
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
         posts = post_client.get_batch({'user_id': id}, offset, limit+1)
-        if len(posts) <= limit:
-            more = False
-        else:
-            more = True
+        more = more_pages(limit, len(posts))
         return render_template('myposts.html', posts=posts, user=user, page=page, more=more)
 
     @user_crud.route('/<id>/subscriptions')

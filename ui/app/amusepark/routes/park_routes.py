@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.park import CreateParkRequest
 from ..representations.location import Location
 from .auth import verify_auth
-from .pagination import pagination
+from .pagination import pagination, more_pages
 
 
 def construct_park_blueprint(user_client, park_client, post_client):
@@ -21,10 +21,7 @@ def construct_park_blueprint(user_client, park_client, post_client):
         park_subscription_map = {}
         for subscription in subscriptions:
             park_subscription_map[subscription.park.id] = subscription.id
-        if len(parks) <= limit:
-            more = False
-        else:
-            more = True
+        more = more_pages(limit, len(parks))
         return render_template('parks.html', parks=parks, user=user, park_subscription_map=park_subscription_map, page=page, more=more)
 
 
@@ -35,15 +32,10 @@ def construct_park_blueprint(user_client, park_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
         page, offset, limit = pagination(request)
-
         park = park_client.get_by_id(id)
         posts = post_client.get_batch({'park_id': id}, offset, limit+1)
-        if len(posts) <= limit:
-            more = False
-        else:
-            more = True
+        more = more_pages(limit, len(posts))
         return render_template('posts.html', posts=posts, park=park, user=user, page=page, more=more)
 
     @park_crud.route('/<id>/posts/create')
@@ -53,7 +45,6 @@ def construct_park_blueprint(user_client, park_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
         park = park_client.get_by_id(id)
         return render_template('createpost.html', park=park, user=user)
 
