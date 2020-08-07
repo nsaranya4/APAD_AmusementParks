@@ -1,10 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.post import CreatePostRequest
 from ..representations.location import Location
-from .helper import verify_auth, generate_id, pagination, more_pages
+from .helper import verify_auth, pagination, more_pages
 
 
-def construct_post_blueprint(firebase_storage, user_client, post_client):
+def construct_post_blueprint(firebase_client, user_client, post_client):
     post_crud = Blueprint('post', __name__)
 
     @post_crud.route('/<id>')
@@ -15,9 +15,7 @@ def construct_post_blueprint(firebase_storage, user_client, post_client):
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         post = post_client.get_by_id(id)
-        if post.image_id not in ["image123", "hardcode"]:
-            image_link = firebase_storage.child(post.image_id).get_url(None)
-            post.image_id = image_link
+        post.image_id = firebase_client.get_image_link(post.image_id)
         return render_template('post.html', post=post, user=user)
 
     @post_crud.route('/tag/<tag>')
@@ -56,8 +54,7 @@ def construct_post_blueprint(firebase_storage, user_client, post_client):
 
         if request.method == 'POST':
             image = request.files['image']
-            image_id = "images/{}".format(generate_id())
-            firebase_storage.child(image_id).put(image)
+            image_id = firebase_client.store_image(image)
             data = request.form.to_dict(flat=True)
             tags = [x.strip() for x in data['tags'].split(',')]
             post_request = CreatePostRequest(title=data['title'],
