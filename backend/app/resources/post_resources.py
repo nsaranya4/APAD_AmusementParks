@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource, reqparse
 from resources.errors import InternalServerError
 from representations.post import CreatePostRequestSchema
+from .errors import BadRequestError, EntityNotFoundError
 
 
 class PostResource(Resource):
@@ -9,12 +10,23 @@ class PostResource(Resource):
         self.post_service = kwargs['post_service']
 
     def get(self, id):
-        post = self.post_service.get_by_id(id=id)
-        return post, 200
+        post, error = self.post_service.get_by_id(id=id)
+        if error is not None:
+            return post, 500
+        elif post is None:
+            return None, 404
+        else:
+            return post, 200
+        
 
     def delete(self, id):
-        post = self.post_service.delete_by_id(id=id)
-        return None, 204
+        post, error = self.post_service.delete_by_id(id=id)
+        if error is not None and error == BadRequestError:
+            return None, 400
+        elif error is not None:
+            return None, 500
+        else:
+            return None, 204
 
 
 class PostsResource(Resource):
@@ -52,7 +64,13 @@ class PostsResource(Resource):
             return errors, 400
 
         try:
-            post = self.post_service.create(create_post_request)
-            return post, 200
+            post,error = self.post_service.create(create_post_request)
+            if error is not None:
+                return None, 500
+            elif post is None:
+                return None, 404
+            else:
+                return post, 200
+
         except Exception:
             raise InternalServerError

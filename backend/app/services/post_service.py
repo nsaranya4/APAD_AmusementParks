@@ -3,6 +3,7 @@ from repos.park_repo import ParkRepo
 from repos.user_repo import UserRepo
 from models.post import Post, Location
 from representations.post import CreatePostRequest, PostSchema
+from resources.errors import BadRequestError
 
 
 class PostService:
@@ -26,18 +27,32 @@ class PostService:
         post.tags = create_post_request.tags
         post.location = location
         post.park = park
-        post.user = user
-        post = self.post_repo.create(post)
-        return self.post_schema.dump(post).data
+        if user is not None and error is None:
+            post.user = user
+        else:
+            return None, error
+        post, error = self.post_repo.create(post)
+        if post is not None and error is None:
+            return self.post_schema.dump(post).data, None
+        else:
+            return None, error
 
     def get_batch(self, offset, limit, filters):
         posts = self.post_repo.get_batch(offset, limit, filters)
         return self.posts_schema.dump(posts).data
 
     def get_by_id(self, id):
-        post = self.post_repo.get_by_id(id)
-        return self.post_schema.dump(post).data
+        post, error = self.post_repo.get_by_id(id)
+        if post is not None and error is None:
+            return self.post_schema.dump(post).data, None
+        else:
+            return None, error
 
     def delete_by_id(self, id):
-        post = self.post_repo.get_by_id(id)
-        self.post_repo.delete(post)
+        post,error = self.post_repo.get_by_id(id)
+        if post is not None and error is None:
+           return self.post_repo.delete(post), None
+        elif post is None and error is not None:
+            return None, BadRequestError
+        else:
+            return None, error
