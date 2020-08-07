@@ -16,12 +16,12 @@ def construct_park_blueprint(user_client, park_client, post_client):
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
-        parks = park_client.get_batch({}, offset, limit)
+        parks = park_client.get_batch({}, offset, limit+1)
         subscriptions = user_client.get_subscriptions(user.id)
         park_subscription_map = {}
         for subscription in subscriptions:
             park_subscription_map[subscription.park.id] = subscription.id
-        if len(parks) < limit:
+        if len(parks) <= limit:
             more = False
         else:
             more = True
@@ -39,8 +39,8 @@ def construct_park_blueprint(user_client, park_client, post_client):
         page, offset, limit = pagination(request)
 
         park = park_client.get_by_id(id)
-        posts = post_client.get_batch({'park_id': id}, offset, limit)
-        if len(posts) < limit:
+        posts = post_client.get_batch({'park_id': id}, offset, limit+1)
+        if len(posts) <= limit:
             more = False
         else:
             more = True

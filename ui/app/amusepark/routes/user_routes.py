@@ -14,8 +14,8 @@ def construct_user_blueprint(user_client, post_client):
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
-        posts = post_client.get_batch({'user_id': id}, offset, limit)
-        if len(posts) < limit:
+        posts = post_client.get_batch({'user_id': id}, offset, limit+1)
+        if len(posts) <= limit:
             more = False
         else:
             more = True
