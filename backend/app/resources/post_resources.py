@@ -64,11 +64,9 @@ class PostsResource(Resource):
             return errors, 400
 
         try:
-            post,error = self.post_service.create(create_post_request)
+            post, error = self.post_service.create(create_post_request)
             if error is not None:
                 return None, 500
-            elif post is None:
-                return None, 404
             else:
                 return post, 200
 
