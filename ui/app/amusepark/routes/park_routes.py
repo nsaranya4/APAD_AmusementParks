@@ -23,7 +23,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
         for subscription in subscriptions:
             park_subscription_map[subscription.park.id] = subscription.id
         more = more_pages(limit, len(parks))
-        return render_template('parks.html', parks=parks, user=user, park_subscription_map=park_subscription_map, page=page, more=more)
+        return render_template('parks.html',  current_page='viewparks', parks=parks, user=user, park_subscription_map=park_subscription_map, page=page, more=more)
 
 
     @park_crud.route('/<id>/posts')
@@ -40,7 +40,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
         for post in posts:
             post.image_id = firebase_client.get_image_link(post.image_id)
         more = more_pages(limit, len(posts))
-        return render_template('posts.html', posts=posts, park=park, user=user, page=page, more=more)
+        return render_template('posts.html', current_page='viewparks', posts=posts, park=park, user=user, page=page, more=more)
 
     @park_crud.route('/<id>/posts/create')
     def create_post(id):
@@ -51,7 +51,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
         user = user_client.get_by_email_id(claims['email'])
         park = park_client.get_by_id(id)
         park.image_id = firebase_client.get_image_link(park.image_id)
-        return render_template('createpost.html', park=park, user=user)
+        return render_template('createpost.html', current_page='viewparks', park=park, user=user)
 
     @park_crud.route('/create', methods=['GET', 'POST'])
     def create():
@@ -72,10 +72,10 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
                                              location=Location(lat=data['lat'], lng=data['lng']))
             park, error = park_client.create(park_request)
             if error is not None:
-                return render_template('error.html', user=user)
+                return render_template('error.html', current_page='viewparks',  user=user)
             else:
                 return redirect(url_for('.view_parks'))
 
-        return render_template('createpark.html', user=user)
+        return render_template('createpark.html', current_page='viewparks',  user=user)
 
     return park_crud
