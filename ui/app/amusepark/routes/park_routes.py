@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.park import CreateParkRequest
 from ..representations.location import Location
 from .auth import verify_auth
-from .pagination import pagination
+from .pagination import pagination, more_pages
 
 
 def construct_park_blueprint(user_client, park_client, post_client):
@@ -16,15 +16,12 @@ def construct_park_blueprint(user_client, park_client, post_client):
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
-        parks = park_client.get_batch({}, offset, limit)
+        parks = park_client.get_batch({}, offset, limit+1)
         subscriptions = user_client.get_subscriptions(user.id)
         park_subscription_map = {}
         for subscription in subscriptions:
             park_subscription_map[subscription.park.id] = subscription.id
-        if len(parks) < limit:
-            more = False
-        else:
-            more = True
+        more = more_pages(limit, len(parks))
         return render_template('parks.html', parks=parks, user=user, park_subscription_map=park_subscription_map, page=page, more=more)
 
 
@@ -35,15 +32,10 @@ def construct_park_blueprint(user_client, park_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
         page, offset, limit = pagination(request)
-
         park = park_client.get_by_id(id)
-        posts = post_client.get_batch({'park_id': id}, offset, limit)
-        if len(posts) < limit:
-            more = False
-        else:
-            more = True
+        posts = post_client.get_batch({'park_id': id}, offset, limit+1)
+        more = more_pages(limit, len(posts))
         return render_template('posts.html', posts=posts, park=park, user=user, page=page, more=more)
 
     @park_crud.route('/<id>/posts/create')
@@ -53,7 +45,6 @@ def construct_park_blueprint(user_client, park_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
         park = park_client.get_by_id(id)
         return render_template('createpost.html', park=park, user=user)
 
@@ -72,8 +63,12 @@ def construct_park_blueprint(user_client, park_client, post_client):
                                              image_id='hardcoded',
                                              user_id=data['user_id'],
                                              location=Location(lat=data['lat'], lng=data['lng']))
-            park = park_client.create(park_request)
-            return redirect(url_for('.view_parks'))
+            park, error = park_client.create(park_request)
+            if error is not None:
+                return render_template('error.html', user=user)
+            else:
+                return redirect(url_for('.view_parks'))
+
         return render_template('createpark.html', user=user)
 
     return park_crud

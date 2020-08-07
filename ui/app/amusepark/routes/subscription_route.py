@@ -35,7 +35,7 @@ def construct_subscription_blueprint(user_client):
             #check if the subscription belongs to user. Can be done on backend also
             error = user_client.delete_subscription(subscription_id)
             if error is None:
-                return render_template('success.html', user=user)
+                return redirect(url_for('user.view_subscriptions', id=str(user.id)))
             else:
                 return render_template('error.html', user=user)
 

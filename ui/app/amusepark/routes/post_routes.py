@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.post import CreatePostRequest
 from ..representations.location import Location
 from .auth import verify_auth
+from .pagination import pagination, more_pages
 
 
 def construct_post_blueprint(user_client, post_client):
@@ -14,7 +15,6 @@ def construct_post_blueprint(user_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
         post = post_client.get_by_id(id)
         return render_template('post.html', post=post, user=user)
 
@@ -25,17 +25,10 @@ def construct_post_blueprint(user_client, post_client):
         if claims == None or error_message != None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
-
-        page = request.args.get('page', None)
-        if page:
-            page = page.encode('utf-8')
-            skip = int(page)
-        else:
-            skip = 0
-        limit = 10
-        offset = skip * 10
-        posts = post_client.get_batch({'tag': tag}, offset, limit)
-        return render_template('myposts.html', posts=posts, user=user)
+        page, offset, limit = pagination(request)
+        posts = post_client.get_batch({'tag': tag}, offset, limit+1)
+        more = more_pages(limit, len(posts))
+        return render_template('myposts.html', posts=posts, user=user, page=page, more=more)
 
     @post_crud.route('/tag', methods=['POST'])
     def view_posts_with_tag():
@@ -47,16 +40,10 @@ def construct_post_blueprint(user_client, post_client):
 
         data = request.form.to_dict(flat=True)
         tag = data['searchtext']
-        page = request.args.get('page', None)
-        if page:
-            page = page.encode('utf-8')
-            skip = int(page)
-        else:
-            skip = 0
-        limit = 10
-        offset = skip * 10
-        posts = post_client.get_batch({'tag': tag}, offset, limit)
-        return render_template('myposts.html', posts=posts, user=user)
+        page, offset, limit = pagination(request)
+        posts = post_client.get_batch({'tag': tag}, offset, limit+1)
+        more = more_pages(limit, len(posts))
+        return render_template('myposts.html', posts=posts, user=user, page=page, more=more)
 
     @post_crud.route('/create', methods=['POST'])
     def create():
