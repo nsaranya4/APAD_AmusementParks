@@ -17,7 +17,7 @@ def construct_user_blueprint(firebase_client, user_client, post_client):
         for post in posts:
             post.image_id = firebase_client.get_image_link(post.image_id)
         more = more_pages(limit, len(posts))
-        return render_template('myposts.html', posts=posts, user=user, page=page, more=more)
+        return render_template('myposts.html', current_page='myposts',posts=posts, user=user, page=page, more=more)
 
     @user_crud.route('/<id>/subscriptions')
     def view_subscriptions(id):
@@ -35,6 +35,6 @@ def construct_user_blueprint(firebase_client, user_client, post_client):
         for park in parks:
             park.image_id = firebase_client.get_image_link(park.image_id)
 
-        return render_template('mysubscriptions.html', parks=parks, user=user,  park_subscription_map=park_subscription_map)
+        return render_template('mysubscriptions.html', current_page='mysubscriptions', parks=parks, user=user,  park_subscription_map=park_subscription_map)
 
     return user_crud
