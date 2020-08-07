@@ -14,19 +14,20 @@ class ParkService:
         self.parks_schema = ParkSchema(many=True)
 
     def create(self, create_park_request: CreateParkRequest):
-        user, error = self.user_repo.get_by_id(create_park_request.user_id)
         park = Park()
+        user, error = self.user_repo.get_by_id(create_park_request.user_id)
+         if user is not None and error is None:
+            park.user = user
+        else:
+            return None, error
+        
         location = Location()
         location.lat = create_park_request.location.lat
         location.lng = create_park_request.location.lng
         park.name = create_park_request.name
         park.description = create_park_request.description
         park.image_id = create_park_request.image_id
-        park.location = location
-        if user is not None and error is None:
-            park.user = user
-        else:
-            return None, error
+        park.location = location       
         park, error = self.park_repo.create(park)
         if park is not None and error is None:
             return self.park_schema.dump(park).data, None
