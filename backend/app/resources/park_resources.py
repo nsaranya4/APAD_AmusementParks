@@ -9,7 +9,7 @@ class ParkResource(Resource):
         self.park_service = kwargs['park_service']
 
     def get(self, id: str):
-        park,error = self.park_service.get_by_id(id)
+        park, error = self.park_service.get_by_id(id)
         if error is not None:
             return None, 500
         elif park is None:
@@ -59,9 +59,7 @@ class ParksResource(Resource):
         try:
             park, error = self.park_service.create(create_park_request)
             if error is not None:
-                return None, 500
-            elif park is None:
-                return None, 404
+                return None, 500            
             else:
                 return park, 200
 
