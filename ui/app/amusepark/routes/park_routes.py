@@ -4,7 +4,7 @@ from ..representations.location import Location
 from .helper import verify_auth, pagination, more_pages
 
 
-def construct_park_blueprint(user_client, park_client, post_client):
+def construct_park_blueprint(firebase_client, user_client, park_client, post_client):
     park_crud = Blueprint('park', __name__)
 
     @park_crud.route('/')
@@ -56,10 +56,12 @@ def construct_park_blueprint(user_client, park_client, post_client):
         user = user_client.get_by_email_id(claims['email'])
 
         if request.method == 'POST':
+            image = request.files['image']
+            image_id = firebase_client.store_image(image)
             data = request.form.to_dict(flat=True)
             park_request = CreateParkRequest(name=data['name'],
                                              description=data['description'],
-                                             image_id='hardcoded',
+                                             image_id=image_id,
                                              user_id=data['user_id'],
                                              location=Location(lat=data['lat'], lng=data['lng']))
             park, error = park_client.create(park_request)
