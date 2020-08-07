@@ -16,6 +16,9 @@ def construct_post_blueprint(firebase_storage, user_client, post_client):
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         post = post_client.get_by_id(id)
+        if post.image_id not in ["image123", "hardcode"]:
+            image_link = firebase_storage.child(post.image_id).get_url(None)
+            post.image_id = image_link
         return render_template('post.html', post=post, user=user)
 
     @post_crud.route('/tag/<tag>')
