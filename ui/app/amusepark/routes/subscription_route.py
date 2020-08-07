@@ -37,6 +37,6 @@ def construct_subscription_blueprint(user_client):
             if error is None:
                 return redirect(url_for('user.view_subscriptions', id=str(user.id)))
             else:
-                return render_template('error.html', user=user)
+                return render_template('error.html', current_page='mysubscriptions', user=user)
 
     return subscription_crud
