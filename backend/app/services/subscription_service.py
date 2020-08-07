@@ -14,10 +14,18 @@ class SubscriptionService:
         self.subscriptions_schema = SubscriptionSchema(many=True)
 
     def create(self, create_subscription_request: CreateSubscriptionRequest):
-        park = self.park_repo.get_by_id(create_subscription_request.park_id)
-        user, error = self.user_repo.get_by_id(create_subscription_request.user_id)
-        if error is not None:
+        park, error = self.park_repo.get_by_id(create_subscription_request.park_id)
+        if park is not None and error is None:
+            post.park = park
+        else: 
             return None, error
+        
+        user, error = self.user_repo.get_by_id(create_post_request.user_id)
+         if user is not None and error is None:
+            post.user = user
+        else:
+            return None, error
+        
         subscription = Subscription(park=park, user=user)
         subscription = self.subscription_repo.create(subscription)
         return self.subscription_schema.dump(subscription).data, None

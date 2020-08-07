@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource, reqparse
 from representations.park import ParkSchema, CreateParkRequestSchema
-from resources.errors import InternalServerError
+from resources.errors import InternalServerError, BadRequestError
 
 
 class ParkResource(Resource):
@@ -9,12 +9,22 @@ class ParkResource(Resource):
         self.park_service = kwargs['park_service']
 
     def get(self, id: str):
-        park = self.park_service.get_by_id(id)
-        return park, 200
+        park, error = self.park_service.get_by_id(id)
+        if error is not None:
+            return None, 500
+        elif park is None:
+            return None, 404
+        else:
+            return park, 200
     
     def delete(self, id: str):
-        self.park_service.delete_by_id(id)
-        return None, 204
+        park, error = self.park_service.delete_by_id(id)
+        if error is not None and error == BadRequestError:
+            return None, 400
+        elif error is not None:
+            return None, 500
+        else:
+            return None, 204
 
 
 class ParksResource(Resource):
@@ -47,7 +57,11 @@ class ParksResource(Resource):
             return errors, 400
 
         try:
-            park = self.park_service.create(create_park_request)
-            return park, 200
+            park, error = self.park_service.create(create_park_request)
+            if error is not None:
+                return None, 500            
+            else:
+                return park, 200
+
         except Exception:
             raise InternalServerError
