@@ -16,6 +16,8 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
         parks = park_client.get_batch({}, offset, limit+1)
+        for park in parks:
+            park.image_id = firebase_client.get_image_link(park.image_id)
         subscriptions = user_client.get_subscriptions(user.id)
         park_subscription_map = {}
         for subscription in subscriptions:
@@ -33,7 +35,10 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
         park = park_client.get_by_id(id)
+        park.image_id = firebase_client.get_image_link(park.image_id)
         posts = post_client.get_batch({'park_id': id}, offset, limit+1)
+        for post in posts:
+            post.image_id = firebase_client.get_image_link(post.image_id)
         more = more_pages(limit, len(posts))
         return render_template('posts.html', posts=posts, park=park, user=user, page=page, more=more)
 
@@ -45,6 +50,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         park = park_client.get_by_id(id)
+        park.image_id = firebase_client.get_image_link(park.image_id)
         return render_template('createpost.html', park=park, user=user)
 
     @park_crud.route('/create', methods=['GET', 'POST'])

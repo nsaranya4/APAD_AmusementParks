@@ -27,6 +27,8 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
         posts = post_client.get_batch({'tag': tag}, offset, limit+1)
+        for post in posts:
+            post.image_id = firebase_client.get_image_link(post.image_id)
         more = more_pages(limit, len(posts))
         return render_template('myposts.html', posts=posts, user=user, page=page, more=more)
 
@@ -42,6 +44,8 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
         tag = data['searchtext']
         page, offset, limit = pagination(request)
         posts = post_client.get_batch({'tag': tag}, offset, limit+1)
+        for post in posts:
+            post.image_id = firebase_client.get_image_link(post.image_id)
         more = more_pages(limit, len(posts))
         return render_template('myposts.html', posts=posts, user=user, page=page, more=more)
 

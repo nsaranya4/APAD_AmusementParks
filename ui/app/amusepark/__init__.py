@@ -36,7 +36,7 @@ def create_app():
     user_client = UserClient(backend_url)
     firebase_client = FirebaseClient(firebase_config)
 
-    user_crud = construct_user_blueprint(user_client, post_client)
+    user_crud = construct_user_blueprint(firebase_client, user_client, post_client)
     app.register_blueprint(user_crud, url_prefix='/users')
 
     post_crud = construct_post_blueprint(firebase_client, user_client, post_client)
