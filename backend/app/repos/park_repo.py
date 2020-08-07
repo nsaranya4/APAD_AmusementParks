@@ -4,8 +4,14 @@ from models.park import Park
 class ParkRepo:
 
     def get_by_id(self, id: str):
-        return Park.objects.get(id=id)
-
+        try:
+            park = Park.objects.get(id=id)
+            return park, None
+        except Park.DoesNotExist:
+            return None, None
+        except Exception as e:
+            return None, e
+            
     def get_batch(self, offset: int, limit: int, filters: dict):
         park_list = Park.objects
         if filters.keys().__contains__('user_id'):
@@ -13,8 +19,11 @@ class ParkRepo:
         return park_list.skip(offset).limit(limit)
 
     def create(self, park: Park):
-        park = park.save()
-        return park
+        try:
+            park = park.save()
+            return park, None
+        except Exception as e:
+            return None, e
 
     def delete(self, park: Park):
         park.delete()

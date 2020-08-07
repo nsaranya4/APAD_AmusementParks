@@ -15,7 +15,7 @@ class PostService:
         self.posts_schema = PostSchema(many=True)
 
     def create(self, create_post_request: CreatePostRequest):
-        park = self.park_repo.get_by_id(create_post_request.park_id)
+        park, error = self.park_repo.get_by_id(create_post_request.park_id)
         user, error = self.user_repo.get_by_id(create_post_request.user_id)
         post = Post()
         location = Location()
@@ -26,7 +26,10 @@ class PostService:
         post.image_id = create_post_request.image_id
         post.tags = create_post_request.tags
         post.location = location
-        post.park = park
+        if park is not None and error is None:
+            post.park = park
+        else: 
+            return None, error
         if user is not None and error is None:
             post.user = user
         else:

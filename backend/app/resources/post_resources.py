@@ -12,7 +12,7 @@ class PostResource(Resource):
     def get(self, id):
         post, error = self.post_service.get_by_id(id=id)
         if error is not None:
-            return post, 500
+            return None, 500
         elif post is None:
             return None, 404
         else:

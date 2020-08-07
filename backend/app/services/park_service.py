@@ -3,6 +3,7 @@ from repos.user_repo import UserRepo
 from models.park import Park
 from models.location import Location
 from representations.park import CreateParkRequest, ParkSchema
+from resources.errors import BadRequestError
 
 
 class ParkService:
@@ -22,18 +23,32 @@ class ParkService:
         park.description = create_park_request.description
         park.image_id = create_park_request.image_id
         park.location = location
-        park.user = user
-        park = self.park_repo.create(park)
-        return self.park_schema.dump(park).data
+        if user is not None and error is None:
+            park.user = user
+        else:
+            return None, error
+        park, error = self.park_repo.create(park)
+        if park is not None and error is None:
+            return self.park_schema.dump(park).data, None
+        else: 
+            return None, error
 
     def get_batch(self, offset: int, limit: int, filters: dict):
         parks = self.park_repo.get_batch(offset, limit, filters)
         return self.parks_schema.dump(parks).data
 
     def get_by_id(self, id):
-        park = self.park_repo.get_by_id(id)
-        return self.park_schema.dump(park).data
+        park, error = self.park_repo.get_by_id(id)
+        if park is not None and error is None:
+            return self.park_schema.dump(park).data, None
+        else:
+            return None, error
 
     def delete_by_id(self, id):
-        park = self.park_repo.get_by_id(id)
-        self.park_repo.delete(park)
+        park, error = self.park_repo.get_by_id(id)
+        if park is not None and error is None:
+            return self.park_repo.delete(park), None
+        elif park is None and error is not None:
+            return None, BadRequestError
+        else:
+            return None, error
