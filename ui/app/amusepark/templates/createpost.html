@@ -20,7 +20,7 @@
 <div class="jambotran">
       <h2 class="py-3">Create new Post</h2>
       <div class="form bg-white p-2">
-        <form method="POST"  action="/posts/create">
+        <form method="POST"  action="/posts/create" enctype="multipart/form-data">
             <!-- Somehow make the user object reach here -->
             <input type="hidden" name="park_id" id="park_id" value="{{ park.id }}"/>
             <input type="hidden" name="user_id" value="{{user.id}}"/>
@@ -44,6 +44,10 @@
             <div class="form-group">
                 <label for="lng">Longitude</label>
                 <input type="text" class="form-control" id="lng"  placeholder="1.0" name="lng" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Upload Image</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>

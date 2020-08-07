@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, request, url_for, render_template
 from ..representations.subscription import CreateSubscriptionRequest
-from .auth import verify_auth
+from .helper import verify_auth
 
 
 def construct_subscription_blueprint(user_client):

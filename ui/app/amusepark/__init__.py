@@ -8,6 +8,7 @@ from .routes.auth_routes import construct_auth_blueprint
 from .clients.park_client import ParkClient
 from .clients.post_client import PostClient
 from .clients.user_client import UserClient
+from .clients.firebase_client import FirebaseClient
 
 
 def create_app():
@@ -18,6 +19,14 @@ def create_app():
     config_name = os.getenv('ENVIRONMENT', 'development')
     app = Flask(__package__)
     app.config.from_object(config[config_name])
+    firebase_config = {
+        "apiKey": "AIzaSyB3DRvsjbOW3fERPd-WtUbixmfiZJvcWfE",
+        "authDomain": "funtech-frontend.firebaseapp.com",
+        "databaseURL": "https://funtech-frontend.firebaseio.com",
+        "projectId": "funtech-frontend",
+        "storageBucket": "funtech-frontend.appspot.com",
+        "messagingSenderId": "679639892749"
+    }
 
     # Set the secret key to some random bytes
     app.secret_key = os.urandom(16)
@@ -25,14 +34,15 @@ def create_app():
     park_client = ParkClient(backend_url)
     post_client = PostClient(backend_url)
     user_client = UserClient(backend_url)
+    firebase_client = FirebaseClient(firebase_config)
 
-    user_crud = construct_user_blueprint(user_client, post_client)
+    user_crud = construct_user_blueprint(firebase_client, user_client, post_client)
     app.register_blueprint(user_crud, url_prefix='/users')
 
-    post_crud = construct_post_blueprint(user_client, post_client)
+    post_crud = construct_post_blueprint(firebase_client, user_client, post_client)
     app.register_blueprint(post_crud, url_prefix='/posts')
 
-    park_crud = construct_park_blueprint(user_client, park_client, post_client)
+    park_crud = construct_park_blueprint(firebase_client, user_client, park_client, post_client)
     app.register_blueprint(park_crud, url_prefix='/parks')
 
     subscription_crud = construct_subscription_blueprint(user_client)

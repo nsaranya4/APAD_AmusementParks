@@ -1,5 +1,28 @@
 from google.auth.transport import requests
 import google.oauth2.id_token
+import random
+import string
+
+
+# generate page, offset, limit
+def pagination(request):
+    page = request.args.get('page', None)
+    if page:
+        page = page.encode('utf-8')
+        skip = int(page)
+    else:
+        skip = 0
+    limit = 4
+    offset = skip * limit
+    return skip, offset, limit
+
+
+# check if there are more pages
+def more_pages(limit, current_len):
+    if current_len > limit:
+        return True
+    else:
+        return False
 
 
 # This code is written by using SampleProject as reference

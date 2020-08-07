@@ -1,11 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.park import CreateParkRequest
 from ..representations.location import Location
-from .auth import verify_auth
-from .pagination import pagination, more_pages
+from .helper import verify_auth, pagination, more_pages
 
 
-def construct_park_blueprint(user_client, park_client, post_client):
+def construct_park_blueprint(firebase_client, user_client, park_client, post_client):
     park_crud = Blueprint('park', __name__)
 
     @park_crud.route('/')
@@ -17,6 +16,8 @@ def construct_park_blueprint(user_client, park_client, post_client):
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
         parks = park_client.get_batch({}, offset, limit+1)
+        for park in parks:
+            park.image_id = firebase_client.get_image_link(park.image_id)
         subscriptions = user_client.get_subscriptions(user.id)
         park_subscription_map = {}
         for subscription in subscriptions:
@@ -34,7 +35,10 @@ def construct_park_blueprint(user_client, park_client, post_client):
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
         park = park_client.get_by_id(id)
+        park.image_id = firebase_client.get_image_link(park.image_id)
         posts = post_client.get_batch({'park_id': id}, offset, limit+1)
+        for post in posts:
+            post.image_id = firebase_client.get_image_link(post.image_id)
         more = more_pages(limit, len(posts))
         return render_template('posts.html', posts=posts, park=park, user=user, page=page, more=more)
 
@@ -46,6 +50,7 @@ def construct_park_blueprint(user_client, park_client, post_client):
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         park = park_client.get_by_id(id)
+        park.image_id = firebase_client.get_image_link(park.image_id)
         return render_template('createpost.html', park=park, user=user)
 
     @park_crud.route('/create', methods=['GET', 'POST'])
@@ -57,10 +62,12 @@ def construct_park_blueprint(user_client, park_client, post_client):
         user = user_client.get_by_email_id(claims['email'])
 
         if request.method == 'POST':
+            image = request.files['image']
+            image_id = firebase_client.store_image(image)
             data = request.form.to_dict(flat=True)
             park_request = CreateParkRequest(name=data['name'],
                                              description=data['description'],
-                                             image_id='hardcoded',
+                                             image_id=image_id,
                                              user_id=data['user_id'],
                                              location=Location(lat=data['lat'], lng=data['lng']))
             park, error = park_client.create(park_request)
