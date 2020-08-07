@@ -13,9 +13,11 @@ class ParkClient:
     def create(self, create_park_request):
         payload = self.create_park_request_schema.dump(create_park_request).data
         response = requests.post(self.park_path, json=payload, headers=self.headers)
-        # TODO:: handle error codes
-        park = self.park_schema.load(response.json()).data
-        return park
+        if response.status_code == 200:
+            park = self.park_schema.load(response.json()).data
+            return park, None
+        else:
+            return None, Exception("failed to create park")
 
     def get_by_id(self, id):
         response = requests.get(self.park_path + "/" + id)

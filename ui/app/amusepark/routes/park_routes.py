@@ -72,8 +72,12 @@ def construct_park_blueprint(user_client, park_client, post_client):
                                              image_id='hardcoded',
                                              user_id=data['user_id'],
                                              location=Location(lat=data['lat'], lng=data['lng']))
-            park = park_client.create(park_request)
-            return redirect(url_for('.view_parks'))
+            park, error = park_client.create(park_request)
+            if error is not None:
+                return render_template('error.html', user=user)
+            else:
+                return redirect(url_for('.view_parks'))
+
         return render_template('createpark.html', user=user)
 
     return park_crud
