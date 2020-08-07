@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from .auth import verify_auth
-from .pagination import pagination, more_pages
+from .helper import verify_auth, pagination, more_pages
 
 
 def construct_user_blueprint(user_client, post_client):

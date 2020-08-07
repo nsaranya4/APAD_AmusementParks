@@ -1,5 +1,5 @@
 from flask import Blueprint, session, render_template, request, redirect, url_for
-from .auth import verify_auth
+from .helper import verify_auth
 from ..representations.user import CreateUserRequest
 
 

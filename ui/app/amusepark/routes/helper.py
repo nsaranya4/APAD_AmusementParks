@@ -4,6 +4,27 @@ import random
 import string
 
 
+# generate page, offset, limit
+def pagination(request):
+    page = request.args.get('page', None)
+    if page:
+        page = page.encode('utf-8')
+        skip = int(page)
+    else:
+        skip = 0
+    limit = 4
+    offset = skip * limit
+    return skip, offset, limit
+
+
+# check if there are more pages
+def more_pages(limit, current_len):
+    if current_len > limit:
+        return True
+    else:
+        return False
+
+
 # Method to generate alphanumeric id of 32 chars
 def generate_id():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=32))

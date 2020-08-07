@@ -1,8 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.park import CreateParkRequest
 from ..representations.location import Location
-from .auth import verify_auth
-from .pagination import pagination, more_pages
+from .helper import verify_auth, pagination, more_pages
 
 
 def construct_park_blueprint(user_client, park_client, post_client):

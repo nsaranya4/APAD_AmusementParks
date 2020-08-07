@@ -1,8 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.post import CreatePostRequest
 from ..representations.location import Location
-from .auth import verify_auth, generate_id
-from .pagination import pagination, more_pages
+from .helper import verify_auth, generate_id, pagination, more_pages
 
 
 def construct_post_blueprint(firebase_storage, user_client, post_client):
