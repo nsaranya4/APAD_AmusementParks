@@ -1,11 +1,11 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from ..representations.post import CreatePostRequest
 from ..representations.location import Location
-from .auth import verify_auth
+from .auth import verify_auth, generate_id
 from .pagination import pagination, more_pages
 
 
-def construct_post_blueprint(user_client, post_client):
+def construct_post_blueprint(firebase_storage, user_client, post_client):
     post_crud = Blueprint('post', __name__)
 
     @post_crud.route('/<id>')
@@ -53,11 +53,14 @@ def construct_post_blueprint(user_client, post_client):
             return redirect(url_for('auth.login'))
 
         if request.method == 'POST':
+            image = request.files['image']
+            image_id = "images/{}".format(generate_id())
+            firebase_storage.child(image_id).put(image)
             data = request.form.to_dict(flat=True)
             tags = [x.strip() for x in data['tags'].split(',')]
             post_request = CreatePostRequest(title=data['title'],
                                              description=data['description'],
-                                             image_id='hardcode',
+                                             image_id=image_id,
                                              user_id=data['user_id'],
                                              park_id=data['park_id'],
                                              location=Location(lat=data['lat'], lng=data['lng']),

@@ -1,5 +1,12 @@
 from google.auth.transport import requests
 import google.oauth2.id_token
+import random
+import string
+
+
+# Method to generate alphanumeric id of 32 chars
+def generate_id():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=32))
 
 
 # This code is written by using SampleProject as reference
