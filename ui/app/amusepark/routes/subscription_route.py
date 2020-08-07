@@ -10,7 +10,7 @@ def construct_subscription_blueprint(user_client):
     def create():
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
 
         if request.method == 'POST':
@@ -25,14 +25,14 @@ def construct_subscription_blueprint(user_client):
     def delete():
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
 
         if request.method == 'POST':
             data = request.form.to_dict(flat=True)
             subscription_id = data['subscription_id']
-            #check if the subscription belongs to user. Can be done on backend also
+            # check if the subscription belongs to user. Can be done on backend also
             error = user_client.delete_subscription(subscription_id)
             if error is None:
                 return redirect(url_for('user.view_subscriptions', id=str(user.id)))

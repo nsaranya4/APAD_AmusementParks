@@ -12,7 +12,7 @@ def construct_post_blueprint(user_client, post_client):
     def view(id):
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         post = post_client.get_by_id(id)
@@ -22,7 +22,7 @@ def construct_post_blueprint(user_client, post_client):
     def view_posts(tag):
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
@@ -34,7 +34,7 @@ def construct_post_blueprint(user_client, post_client):
     def view_posts_with_tag():
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
 
@@ -49,9 +49,8 @@ def construct_post_blueprint(user_client, post_client):
     def create():
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
-        user = user_client.get_by_email_id(claims['email'])
 
         if request.method == 'POST':
             data = request.form.to_dict(flat=True)

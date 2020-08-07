@@ -10,7 +10,7 @@ def construct_user_blueprint(user_client, post_client):
     def view_posts(id):
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         page, offset, limit = pagination(request)
@@ -22,7 +22,7 @@ def construct_user_blueprint(user_client, post_client):
     def view_subscriptions(id):
         # check user login
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims == None or error_message != None:
+        if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
         subscriptions = user_client.get_subscriptions(id)
