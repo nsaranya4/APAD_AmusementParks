@@ -1,4 +1,3 @@
-import re
 from google.auth.transport import requests
 import google.oauth2.id_token
 
@@ -12,17 +11,10 @@ def verify_auth(id_token):
         try:
             claims = google.oauth2.id_token.verify_firebase_token(
                 id_token, firebase_request_adapter)
-
             if 'email' not in claims:
-                print('email not found\n', claims)
-                error = 'FATAL ERROR! EMAIL NOT FOUND'
-                return ([], error)
-
+                return {}, "USER EMAIL NOT FOUND"
             if 'name' not in claims:
-                regex = r'(.*)@(.*)\.(.*)'
-                claims['name'] = re.match(regex, claims['email'])[1]
-                print('name not found\n', claims)
-
+                claims['name'] = claims['email'].split('@')[0]
         except ValueError as exc:
             error_message = str(exc)
 

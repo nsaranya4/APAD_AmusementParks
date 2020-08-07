@@ -11,9 +11,9 @@ def construct_auth_blueprint(user_client):
     @auth_crud.route('/login/<page>', methods=['GET'])
     def login(page):
         (claims, error_message) = verify_auth(request.cookies.get('token'))
-        if claims != None and error_message == None:
+        if claims is not None and error_message is None:
             user = user_client.get_by_email_id(claims['email'])
-            if user == None:
+            if user is None:
                 create_user_request = CreateUserRequest(name=claims['name'],
                                                         email=claims['email'],
                                                         image_id='hardcode',
@@ -29,7 +29,6 @@ def construct_auth_blueprint(user_client):
             if request.cookies.get('token'):
                 redir.set_cookie('token', request.cookies.get('token'))
             return redir
-
 
     @auth_crud.route('/logout')
     def logout():
