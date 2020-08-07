@@ -15,9 +15,20 @@ class PostService:
         self.posts_schema = PostSchema(many=True)
 
     def create(self, create_post_request: CreatePostRequest):
-        park, error = self.park_repo.get_by_id(create_post_request.park_id)
-        user, error = self.user_repo.get_by_id(create_post_request.user_id)
         post = Post()
+
+        park, error = self.park_repo.get_by_id(create_post_request.park_id) 
+        if park is not None and error is None:
+            post.park = park
+        else: 
+            return None, error
+
+        user, error = self.user_repo.get_by_id(create_post_request.user_id)
+         if user is not None and error is None:
+            post.user = user
+        else:
+            return None, error
+
         location = Location()
         location.lat = create_post_request.location.lat
         location.lng = create_post_request.location.lng
@@ -25,15 +36,7 @@ class PostService:
         post.description = create_post_request.description
         post.image_id = create_post_request.image_id
         post.tags = create_post_request.tags
-        post.location = location
-        if park is not None and error is None:
-            post.park = park
-        else: 
-            return None, error
-        if user is not None and error is None:
-            post.user = user
-        else:
-            return None, error
+        post.location = location             
         post, error = self.post_repo.create(post)
         if post is not None and error is None:
             return self.post_schema.dump(post).data, None
@@ -52,7 +55,7 @@ class PostService:
             return None, error
 
     def delete_by_id(self, id):
-        post,error = self.post_repo.get_by_id(id)
+        post, error = self.post_repo.get_by_id(id)
         if post is not None and error is None:
            return self.post_repo.delete(post), None
         elif post is None and error is not None:
