@@ -44,6 +44,7 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
         (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
+        user = user_client.get_by_email_id(claims['email'])
 
         if request.method == 'POST':
             image = request.files['image']
@@ -58,6 +59,6 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
                                              location=Location(lat=data['lat'], lng=data['lng']),
                                              tags=tags)
             post = post_client.create(post_request)
-            return redirect(url_for('park.view_posts', id=str(post.park.id)))
+            return render_template('success.html', user=user, msg='Post created Successfully !!')
 
     return post_crud
