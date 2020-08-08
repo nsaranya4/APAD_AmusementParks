@@ -10,7 +10,7 @@ def construct_auth_blueprint(user_client):
     @auth_crud.route('/login', defaults={'page': 'index'})
     @auth_crud.route('/login/<page>', methods=['GET'])
     def login(page):
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is not None and error_message is None:
             user = user_client.get_by_email_id(claims['email'])
             if user is None:
@@ -26,8 +26,8 @@ def construct_auth_blueprint(user_client):
                 user_data=claims, error_message=error_message)
         else:
             redir = redirect(url_for('user.view_subscriptions', id=str(user.id)))
-            if request.cookies.get('token'):
-                redir.set_cookie('token', request.cookies.get('token'))
+            if request.cookies.get('funtech_token'):
+                redir.set_cookie('funtech_token', request.cookies.get('funtech_token'))
             return redir
 
     @auth_crud.route('/logout')

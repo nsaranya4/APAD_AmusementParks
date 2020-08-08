@@ -10,7 +10,7 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
     @post_crud.route('/<id>')
     def view(id):
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
@@ -21,7 +21,7 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
     @post_crud.route('/tag/<tag>')
     def view_posts(tag):
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
@@ -41,7 +41,7 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
     @post_crud.route('/create', methods=['POST'])
     def create():
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
 

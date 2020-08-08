@@ -8,7 +8,7 @@ def construct_user_blueprint(firebase_client, user_client, post_client):
     @user_crud.route('/<id>/posts')
     def view_posts(id):
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
@@ -22,7 +22,7 @@ def construct_user_blueprint(firebase_client, user_client, post_client):
     @user_crud.route('/<id>/subscriptions')
     def view_subscriptions(id):
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])

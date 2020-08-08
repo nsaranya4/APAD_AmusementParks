@@ -9,7 +9,7 @@ def construct_subscription_blueprint(user_client):
     @subscription_crud.route('/create', methods=['POST'])
     def create():
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
 
@@ -24,7 +24,7 @@ def construct_subscription_blueprint(user_client):
     @subscription_crud.route('/delete', methods=['POST'])
     def delete():
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
