@@ -2,19 +2,33 @@
 **/.idea
 
 # Android
-**/*.iml
-**/.gradle
+**/*/build/
+**/com_crashlytics_export_strings.xml
 **/local.properties
-**/.idea/caches
-**/.idea/libraries
-**/.idea/modules.xml
+**/.gradle/
+**/.signing/
+**/.idea/libraries/
 **/.idea/workspace.xml
-**/.idea/navEditor.xml
-**/.idea/assetWizardSettings.xml
-**/build
-**/captures
-**/.externalNativeBuild
-**/.cxx
+**/.idea/tasks.xml
+**/.idea/.name
+**/.idea/compiler.xml
+**/.idea/copyright/profiles_settings.xml
+**/.idea/encodings.xml
+**/.idea/misc.xml
+**/.idea/modules.xml
+**/.idea/scopes/scope_settings.xml
+**/.idea/vcs.xml
+**/*.iml
+**/.DS_Store
+**/.DS_Store?
+**/._*
+**/.Spotlight-V100
+**/.Trashes
+**/ehthumbs.db
+**/Thumbs.db
+
+
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
