@@ -14,7 +14,19 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_ParkFragment"
+            app:destination="@id/ParkFragment" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/ParkFragment"
+        android:name="com.funtech.amusementpark.ParkFragment"
+        android:label="@string/park_fragment_label"
+        tools:layout="@layout/fragment_park">
+    </fragment>
+
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.funtech.amusementpark.SecondFragment"
