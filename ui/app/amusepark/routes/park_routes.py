@@ -10,7 +10,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
     @park_crud.route('/')
     def view_parks():
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
@@ -29,7 +29,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
     @park_crud.route('/<id>/posts')
     def view_posts(id):
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
@@ -45,7 +45,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
     @park_crud.route('/<id>/posts/create')
     def create_post(id):
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])
@@ -56,7 +56,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
     @park_crud.route('/create', methods=['GET', 'POST'])
     def create():
         # check user login
-        (claims, error_message) = verify_auth(request.cookies.get('token'))
+        (claims, error_message) = verify_auth(request.cookies.get('funtech_token'))
         if claims is None or error_message is not None:
             return redirect(url_for('auth.login'))
         user = user_client.get_by_email_id(claims['email'])

@@ -31,7 +31,7 @@ window.addEventListener('load', function () {
       }
       console.log(`Signed in as ${user.displayName} (${user.email})`);
       user.getIdToken().then(function (token) {
-        document.cookie = "token=" + token;
+        document.cookie = "funtech_token=" + token;
       });
     } else {
       var ui = new firebaseui.auth.AuthUI(firebase.auth());
@@ -44,7 +44,7 @@ window.addEventListener('load', function () {
       if (login) {
         login.hidden = true;
       }
-      document.cookie = "token=";
+      document.cookie = "funtech_token=";
     }
   }, function (error) {
     console.log(error);
