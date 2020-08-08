@@ -65,8 +65,8 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
             image = request.files['image']
             image_id = firebase_client.store_image(image)
             data = request.form.to_dict(flat=True)
-            park_request = CreateParkRequest(name=data['name'],
-                                             description=data['description'],
+            park_request = CreateParkRequest(name=data['name'].strip(),
+                                             description=data['description'].strip(),
                                              image_id=image_id,
                                              user_id=data['user_id'],
                                              location=Location(lat=data['lat'], lng=data['lng']))
