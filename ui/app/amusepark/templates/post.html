@@ -8,6 +8,7 @@
 {% block body %}
 {% include 'header.html' %}
 <br>
+{% include 'postmap.html' %}
 <main role="main">
 <div class="container" style="margin-top:50px">
   <div class="row mb-2">
@@ -31,6 +32,7 @@
             <img src="{{post.image_id}}" style="background-color:#55595c;" width="200" height="250" alt="">
         </div>
       </div>
+      <div id="map"></div>
     </div>
   </div>
 </div>
