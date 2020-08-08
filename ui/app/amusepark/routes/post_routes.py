@@ -50,8 +50,8 @@ def construct_post_blueprint(firebase_client, user_client, post_client):
             image_id = firebase_client.store_image(image)
             data = request.form.to_dict(flat=True)
             tags = [x.strip().lower().replace('#', '') for x in data['tags'].split(',')]
-            post_request = CreatePostRequest(title=data['title'],
-                                             description=data['description'],
+            post_request = CreatePostRequest(title=data['title'].strip(),
+                                             description=data['description'].strip(),
                                              image_id=image_id,
                                              user_id=data['user_id'],
                                              park_id=data['park_id'],
