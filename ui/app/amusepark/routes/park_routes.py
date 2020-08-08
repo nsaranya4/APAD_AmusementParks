@@ -74,7 +74,7 @@ def construct_park_blueprint(firebase_client, user_client, park_client, post_cli
             if error is not None:
                 return render_template('error.html', user=user)
             else:
-                return redirect(url_for('.view_parks'))
+                return render_template('success.html', user=user, msg='Park created Successfully !!')
 
         return render_template('createpark.html', user=user)
 
