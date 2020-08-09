@@ -12,9 +12,6 @@
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-        <action
             android:id="@+id/action_FirstFragment_to_ParkFragment"
             app:destination="@id/ParkFragment" />
     </fragment>
@@ -29,16 +26,24 @@
         <action
             android:id="@+id/action_ParkFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+
+        <action
+            android:id="@+id/action_ParkFragment_to_PostFragment"
+            app:destination="@id/PostFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.funtech.amusementpark.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/PostFragment"
+        android:name="com.funtech.amusementpark.PostFragment"
+        android:label="@string/post_fragment_label"
+        tools:layout="@layout/fragment_post">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_PostFragment_to_ParkFragment"
+            app:destination="@id/ParkFragment" />
+        <argument
+            android:name="park_id"
+            app:argType="string" />
     </fragment>
+
 </navigation>

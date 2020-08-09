@@ -2,44 +2,46 @@ package com.funtech.amusementpark
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import retrofit2.Call
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.funtech.amusementpark.models.Park
+import com.funtech.amusementpark.models.Post
 import com.funtech.amusementpark.services.Network
+import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.collections.ArrayList
 
-class ParkFragment : Fragment() {
-    private var parks = ArrayList<Park>()
+class PostFragment : Fragment() {
+    private var posts = ArrayList<Post>()
+    private lateinit var parkId: String
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: ParkRecyclerAdapter
+    private lateinit var adapter: PostRecyclerAdapter
+    val args: PostFragmentArgs by navArgs()
 
-    private fun getParks(offset: Int, limit: Int) {
-        var parksCall : Call<List<Park>> = Network.parkService.getBatch(offset, limit)
-        parksCall.enqueue(object : Callback<List<Park>> {
-            override fun onResponse(call : Call<List<Park>>, response: Response<List<Park>>)
+        private fun getPostsForPark(parkId: String, offset: Int, limit: Int) {
+        var postsCall : Call<List<Post>> = Network.postService.getPostsForPark(parkId, offset, limit)
+            postsCall.enqueue(object : Callback<List<Post>> {
+            override fun onResponse(call : Call<List<Post>>, response: Response<List<Post>>)
             {
                 if (response.isSuccessful) {
-                    for (park in response.body()!!) {
-                        parks.add(park)
+                    for (post in response.body()!!) {
+                        posts.add(post)
                     }
                     recyclerView.adapter?.notifyDataSetChanged()
                 }
                 else {
-                    Log.e(TAG, "Failed to get parks from backend")
+                    Log.e(TAG, "Failed to get posts from backend")
                 }
             }
 
-            override fun onFailure(call: Call<List<Park>>, t: Throwable) {
-                Log.e(TAG, "Failed to get parks from backend")
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+                Log.e(TAG, "Failed to get posts from backend")
             }
         })
     }
@@ -49,19 +51,19 @@ class ParkFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_park, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_post, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = ParkRecyclerAdapter(parks, view.context, findNavController())
+        parkId = args.parkId
+        adapter = PostRecyclerAdapter(posts, view.context, findNavController())
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        recyclerView = view.findViewById(R.id.park_recycler_view) as RecyclerView
+        recyclerView = view.findViewById(R.id.post_recycler_view) as RecyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
         setRecyclerViewScrollListener(recyclerView)
-        getParks(0, 5)
+        getPostsForPark(parkId,0, 5)
     }
 
     private fun setRecyclerViewScrollListener(recyclerView: RecyclerView) {
@@ -70,7 +72,7 @@ class ParkFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 val totalItemCount = recyclerView.layoutManager!!.itemCount
                 if (totalItemCount == linearLayoutManager.findLastVisibleItemPosition() + 1) {
-                    getParks(totalItemCount, 5)
+                    getPostsForPark(parkId, totalItemCount, 5)
                 }
             }
         })
@@ -78,7 +80,7 @@ class ParkFragment : Fragment() {
 
 
     companion object {
-        private val TAG = "PARK_FRAGMENT"
-        fun newInstance(): ParkFragment = ParkFragment()
+        private val TAG = "POST_FRAGMENT"
+        fun newInstance(): PostFragment = PostFragment()
     }
 }
