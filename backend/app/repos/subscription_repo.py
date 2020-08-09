@@ -4,7 +4,13 @@ from models.subscription import Subscription
 class SubscriptionRepo:
 
     def get_by_id(self, id: str):
-        return Subscription.objects.get(id=id)
+        try:
+            subscription = Subscription.objects.get(id=id)
+            return subscription, None
+        except Subscription.DoesNotExist:
+            return None, None
+        except Exception as e:
+            return None, e
 
     def get_batch(self, filters: dict):
         subscription_list = Subscription.objects
@@ -13,8 +19,11 @@ class SubscriptionRepo:
         return subscription_list
 
     def create(self, subscription: Subscription):
-        subscription = subscription.save()
-        return subscription
+        try:
+            subscription = subscription.save()
+            return subscription, None
+        except Exception as e:
+            return None, e
 
     def delete(self, subscription: Subscription):
         subscription.delete()

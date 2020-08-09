@@ -4,8 +4,11 @@ from models.user import User
 class UserRepo:
 
       def create(self, user: User):
-        user = user.save()
-        return user
+          try:
+              user = user.save()
+              return user, None
+          except Exception as e:
+             return None, e
 
       def get_by_id(self, id: str):
           try:
