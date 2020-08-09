@@ -1,6 +1,8 @@
 package com.funtech.amusementpark
 
+import android.content.Context
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
@@ -11,13 +13,13 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.park_item.view.*
 
-
-class ParkRecyclerAdapter(private val parks: ArrayList<Park>, private val navController: NavController):
-    RecyclerView.Adapter<ParkRecyclerAdapter.ParkHolder>() {
+class ParkRecyclerAdapter(private val parks: ArrayList<Park>,
+                          private val context: Context,
+                          private val navController: NavController): RecyclerView.Adapter<ParkRecyclerAdapter.ParkHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParkHolder {
-        val inflatedView = parent.inflate(R.layout.park_item, false)
+        val inflatedView = LayoutInflater.from(context).inflate(R.layout.park_item, parent, false)
         return ParkHolder(inflatedView, navController)
     }
 
@@ -40,19 +42,19 @@ class ParkRecyclerAdapter(private val parks: ArrayList<Park>, private val navCon
             val storageRef = FirebaseStorage.getInstance().getReference()
             var imagesRef: StorageReference = storageRef.child(park.image_id)
             imagesRef.downloadUrl.addOnSuccessListener { uri ->
-                Log.d("RecyclerView", uri.toString())
+                Log.d(TAG, uri.toString())
                 Picasso.with(view.context).load(uri).into(view.park_image)
             }.addOnFailureListener {
-                Log.e("RecyclerView", "Failed to download image")
+                Log.e(TAG, "Failed to get download url")
             }
             view.park_name.text = park.name
             view.park_description.text = park.description
         }
 
         override fun onClick(v: View) {
+            Log.d(TAG, "Onclick")
             val action = ParkFragmentDirections.actionParkFragmentToPostFragment(this.park!!.id)
             navController.navigate(action)
-            Log.e(TAG, "CLICK!")
         }
 
         companion object {

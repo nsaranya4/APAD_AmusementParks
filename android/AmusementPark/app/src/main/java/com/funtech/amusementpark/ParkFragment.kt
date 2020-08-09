@@ -1,6 +1,7 @@
 package com.funtech.amusementpark
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,12 +34,12 @@ class ParkFragment : Fragment() {
                     recyclerView.adapter?.notifyDataSetChanged()
                 }
                 else {
-
+                    Log.e(TAG, "Failed to get parks from backend")
                 }
             }
 
             override fun onFailure(call: Call<List<Park>>, t: Throwable) {
-
+                Log.e(TAG, "Failed to get parks from backend")
             }
         })
     }
@@ -54,7 +55,7 @@ class ParkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = ParkRecyclerAdapter(parks, findNavController())
+        adapter = ParkRecyclerAdapter(parks, view.context, findNavController())
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView = view.findViewById(R.id.park_recycler_view) as RecyclerView
         recyclerView.adapter = adapter
@@ -77,6 +78,7 @@ class ParkFragment : Fragment() {
 
 
     companion object {
+        private val TAG = "PARK_FRAGMENT"
         fun newInstance(): ParkFragment = ParkFragment()
     }
 }

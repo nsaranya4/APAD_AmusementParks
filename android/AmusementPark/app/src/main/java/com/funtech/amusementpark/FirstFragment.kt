@@ -25,10 +25,12 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.button_first).setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            val action = FirstFragmentDirections.actionFirstFragmentToSecondFragment()
+            findNavController().navigate(action)
         }
         view.findViewById<Button>(R.id.button_park).setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_ParkFragment)
+            val action = FirstFragmentDirections.actionFirstFragmentToParkFragment()
+            findNavController().navigate(action)
         }
     }
 }

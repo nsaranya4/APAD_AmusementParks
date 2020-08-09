@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,12 +36,12 @@ class PostFragment : Fragment() {
                     recyclerView.adapter?.notifyDataSetChanged()
                 }
                 else {
-                    Log.e("PostRecycler", "Failed to get post from backend")
+                    Log.e(TAG, "Failed to get posts from backend")
                 }
             }
 
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                Log.e("PostRecycler", "Failed to get post from backend")
+                Log.e(TAG, "Failed to get posts from backend")
             }
         })
     }
@@ -56,7 +57,7 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         parkId = args.parkId
-        adapter = PostRecyclerAdapter(posts, view.context)
+        adapter = PostRecyclerAdapter(posts, view.context, findNavController())
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView = view.findViewById(R.id.post_recycler_view) as RecyclerView
         recyclerView.adapter = adapter
@@ -79,6 +80,7 @@ class PostFragment : Fragment() {
 
 
     companion object {
+        private val TAG = "POST_FRAGMENT"
         fun newInstance(): PostFragment = PostFragment()
     }
 }

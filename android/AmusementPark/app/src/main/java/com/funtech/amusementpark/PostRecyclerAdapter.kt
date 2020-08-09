@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.funtech.amusementpark.models.Post
 import com.google.firebase.storage.FirebaseStorage
@@ -12,12 +13,13 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.post_item.view.*
 
-class PostRecyclerAdapter(private val posts: ArrayList<Post>, private val context: Context):
-    RecyclerView.Adapter<PostRecyclerAdapter.PostHolder>() {
+class PostRecyclerAdapter(private val posts: ArrayList<Post>,
+                          private val context: Context,
+                          private val navController: NavController): RecyclerView.Adapter<PostRecyclerAdapter.PostHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostRecyclerAdapter.PostHolder {
         val inflatedView = LayoutInflater.from(context).inflate(R.layout.post_item, parent, false)
-        return PostRecyclerAdapter.PostHolder(inflatedView)
+        return PostRecyclerAdapter.PostHolder(inflatedView, navController)
     }
 
     override fun getItemCount(): Int = posts.size
@@ -27,7 +29,7 @@ class PostRecyclerAdapter(private val posts: ArrayList<Post>, private val contex
         holder.bindPost(post)
     }
 
-    class PostHolder(private val view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    class PostHolder(private val view: View, private val navController: NavController) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private var post: Post? = null
 
         init {
@@ -39,10 +41,10 @@ class PostRecyclerAdapter(private val posts: ArrayList<Post>, private val contex
             val storageRef = FirebaseStorage.getInstance().getReference()
             var imagesRef: StorageReference = storageRef.child(post.image_id)
             imagesRef.downloadUrl.addOnSuccessListener { uri ->
-                Log.d("RecyclerView", uri.toString())
+                Log.d(TAG, uri.toString())
                 Picasso.with(view.context).load(uri).into(view.post_image)
             }.addOnFailureListener {
-                Log.e("RecyclerView", "Failed to download image")
+                Log.e(TAG, "Failed to get download url")
             }
             view.post_title.text = post.title
             view.post_description.text = post.description
@@ -54,6 +56,7 @@ class PostRecyclerAdapter(private val posts: ArrayList<Post>, private val contex
 
         companion object {
             private val POST_KEY = "POST"
+            private val TAG = "POST_RECYLER_ADAPTER"
         }
     }
 
