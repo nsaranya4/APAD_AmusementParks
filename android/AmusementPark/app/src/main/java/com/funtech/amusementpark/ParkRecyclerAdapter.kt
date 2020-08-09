@@ -37,7 +37,7 @@ class ParkRecyclerAdapter(private val parks: ArrayList<Park>):
         fun bindPark(park: Park) {
             this.park = park
             val storageRef = FirebaseStorage.getInstance().getReference()
-            var imagesRef: StorageReference = storageRef.child("images/disney_paris.jpg")
+            var imagesRef: StorageReference = storageRef.child(park.image_id)
             imagesRef.downloadUrl.addOnSuccessListener { uri ->
                 Log.d("RecyclerView", uri.toString())
                 Picasso.with(view.context).load(uri).into(view.park_image)

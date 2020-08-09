@@ -1,40 +1,47 @@
 package com.funtech.amusementpark
 
+import android.net.DnsResolver
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import retrofit2.Call
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.funtech.amusementpark.models.Park
-import java.util.*
+import com.funtech.amusementpark.services.Network
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.collections.ArrayList
 
 class ParkFragment : Fragment() {
-
-    private val image1 = "https://firebasestorage.googleapis.com/v0/b/funtech-frontend.appspot.com/o/images%2Fcedar_point.jpg?alt=medias"
-    private val image2 = "https://firebasestorage.googleapis.com/v0/b/funtech-frontend.appspot.com/o/images%2F7LK169PFGWMPL3H6CWMK02VNNTJSEW4W?alt=media"
-    private val image3 = "https://images.pexels.com/photos/1067333/pexels-photo-1067333.jpeg"
-    private val image4 = "https://firebasestorage.googleapis.com/v0/b/funtech-frontend.appspot.com/o/images%2Funiversal_s.jpg?alt=media"
-    private val image5 = "https://firebasestorage.googleapis.com/v0/b/funtech-frontend.appspot.com/o/images%2Fwonderla_hyd.jpg?alt=media"
-
-    private var parks = ArrayList<Park>(
-        Arrays.asList(
-            Park(image1, "EsselWorld1", "EsselWorld desc"),
-            Park(image2, "EsselWorld2", "EsselWorld desc"),
-            Park(image3, "EsselWorld3", "EsselWorld desc"),
-            Park(image4, "EsselWorld4", "EsselWorld desc"),
-            Park(image5, "EsselWorld5", "EsselWorld desc")
-        )
-    )
+    private var parks = ArrayList<Park>()
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ParkRecyclerAdapter
 
+    private fun getParks(offset: Int, limit: Int) {
+        var parksCall : Call<List<Park>> = Network.parkService.getBatch(offset, limit)
+        parksCall.enqueue(object : Callback<List<Park>> {
+            override fun onResponse(call : Call<List<Park>>, response: Response<List<Park>>)
+            {
+                if (response.isSuccessful) {
+                    for (park in response.body()!!) {
+                        parks.add(park)
+                    }
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
+                else {
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<Park>>, t: Throwable) {
+
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,10 +56,11 @@ class ParkFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         adapter = ParkRecyclerAdapter(parks)
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        var recyclerView = view.findViewById(R.id.park_recycler_view) as RecyclerView
+        recyclerView = view.findViewById(R.id.park_recycler_view) as RecyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
         setRecyclerViewScrollListener(recyclerView)
+        getParks(0, 5)
     }
 
     private fun setRecyclerViewScrollListener(recyclerView: RecyclerView) {
@@ -61,8 +69,7 @@ class ParkFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 val totalItemCount = recyclerView.layoutManager!!.itemCount
                 if (totalItemCount == linearLayoutManager.findLastVisibleItemPosition() + 1) {
-                    parks.add(Park("images/universal_s.jpg", "EsselWorld1", "EsselWorld desc"))
-                    recyclerView.adapter?.notifyDataSetChanged()
+                    getParks(totalItemCount, 5)
                 }
             }
         })
