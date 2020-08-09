@@ -28,8 +28,11 @@ class SubscriptionService:
             return None, error
         
         subscription = Subscription(park=park, user=user)
-        subscription = self.subscription_repo.create(subscription)
-        return self.subscription_schema.dump(subscription).data, None
+        subscription, error = self.subscription_repo.create(subscription)
+        if post is not None and error is None:
+            return self.subscription_schema.dump(subscription).data, None
+        else: 
+            return None, error
 
     def get_batch(self, filters):
         subscriptions = self.subscription_repo.get_batch(filters)
