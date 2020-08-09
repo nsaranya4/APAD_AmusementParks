@@ -1,19 +1,24 @@
 <header>
-  <div class="navbar fixed-top navbar-dark bg-dark shadow-sm">
-    <div class="container d-flex justify-content-between">
-        <a href="/users/{{user.id}}/posts" class="navbar-brand d-flex align-items-center {%if current_page == 'myposts' %} active {% endif %}">
-        <strong>My Posts</strong>
-      </a>
-      <a href="/users/{{user.id}}/subscriptions" class="navbar-brand d-flex align-items-center {%if current_page == 'mysubscriptions' %} active {% endif %}">
-        <strong>My Subscriptions</strong>
-      </a>
-      <a href="/parks/create" class="navbar-brand d-flex align-items-center {%if current_page == 'createpark' %} active {% endif %}">
-        <strong>Create Park</strong>
-      </a>
-      <a href="/parks" class="navbar-brand d-flex align-items-center {%if current_page == 'viewparks' %} active {% endif %}">
-        <strong>Parks</strong>
-      </a>
-
+  <div class="navbar fixed-top navbar-dark bg-dark shadow-sm">    
+      <div class="container d-flex justify-content-between">        
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <a href="/users/{{user.id}}/posts" class="nav-link {%if current_page == 'myposts' %} active {% endif %}" data-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">
+            <strong>My Posts</strong></a>
+          </li>
+          <li class="nav-item">
+            <a href="/users/{{user.id}}/subscriptions" class="nav-link {%if current_page == 'mysubscriptions' %} active {% endif %}" data-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">
+            <strong>My Subscriptions</strong></a>
+          </li>
+          <li class="nav-item">
+            <a href="/parks/create" class="nav-link {%if current_page == 'createpark' %} active {% endif %}" data-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">
+            <strong>Create Park</strong></a>
+          </li>
+          <li class="nav-item">
+            <a href="/parks" class="nav-link {%if current_page == 'viewparks' %} active {% endif %}" data-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">
+            <strong>Parks</strong></a>
+          </li>
+        </ul>
 
         <a class="navbar-brand d-flex align-items-center">
         <div class="container">
@@ -31,3 +36,7 @@
     </div>
   </div>
 </header>
+<script>
+  $(document).ready(function () {
+  $("#{{request.endpoint}}").addClass("active"); })
+</script>

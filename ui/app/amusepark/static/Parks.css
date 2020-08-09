@@ -31,3 +31,6 @@ footer {
 footer p {
   margin-bottom: .25rem;
 }
+a:active{
+  background-color: seagreen;
+}
