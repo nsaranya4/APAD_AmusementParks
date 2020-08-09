@@ -54,7 +54,11 @@ class UsersResource(Resource):
         if errors:
             return errors, 400
         try:
-            user = self.user_service.create(create_user_request)
-            return user, 200
+            user, error = self.user_service.create(create_user_request)
+            if error is not None:
+                return None, 500
+            else:
+                return user, 200
+                
         except Exception:
             raise InternalServerError
