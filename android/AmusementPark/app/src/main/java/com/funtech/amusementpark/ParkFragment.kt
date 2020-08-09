@@ -35,6 +35,7 @@ class ParkFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: ParkRecyclerAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,7 +52,22 @@ class ParkFragment : Fragment() {
         var recyclerView = view.findViewById(R.id.park_recycler_view) as RecyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
+        setRecyclerViewScrollListener(recyclerView)
     }
+
+    private fun setRecyclerViewScrollListener(recyclerView: RecyclerView) {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val totalItemCount = recyclerView.layoutManager!!.itemCount
+                if (totalItemCount == linearLayoutManager.findLastVisibleItemPosition() + 1) {
+                    parks.add(Park("images/universal_s.jpg", "EsselWorld1", "EsselWorld desc"))
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
+            }
+        })
+    }
+
 
     companion object {
         fun newInstance(): ParkFragment = ParkFragment()
