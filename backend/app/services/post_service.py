@@ -24,7 +24,7 @@ class PostService:
             return None, error
 
         user, error = self.user_repo.get_by_id(create_post_request.user_id)
-         if user is not None and error is None:
+        if user is not None and error is None:
             post.user = user
         else:
             return None, error
