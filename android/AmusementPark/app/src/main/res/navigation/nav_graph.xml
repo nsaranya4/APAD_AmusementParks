@@ -25,6 +25,10 @@
         android:name="com.funtech.amusementpark.ParkFragment"
         android:label="@string/park_fragment_label"
         tools:layout="@layout/fragment_park">
+
+        <action
+            android:id="@+id/action_ParkFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
     </fragment>
 
     <fragment
