@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.funtech.amusementpark.models.Post
@@ -16,10 +17,11 @@ import retrofit2.Response
 
 class PostFragment : Fragment() {
     private var posts = ArrayList<Post>()
-    private var parkId = ""
+    private lateinit var parkId: String
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PostRecyclerAdapter
+    val args: PostFragmentArgs by navArgs()
 
         private fun getPostsForPark(parkId: String, offset: Int, limit: Int) {
         var postsCall : Call<List<Post>> = Network.postService.getPostsForPark(parkId, offset, limit)
@@ -48,12 +50,12 @@ class PostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_post, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_post, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        parkId = args.parkId
         adapter = PostRecyclerAdapter(posts, view.context)
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView = view.findViewById(R.id.post_recycler_view) as RecyclerView

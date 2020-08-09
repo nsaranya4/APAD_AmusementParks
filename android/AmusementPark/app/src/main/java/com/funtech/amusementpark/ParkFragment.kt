@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import retrofit2.Call
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.funtech.amusementpark.models.Park
@@ -53,7 +54,7 @@ class ParkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = ParkRecyclerAdapter(parks)
+        adapter = ParkRecyclerAdapter(parks, findNavController())
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView = view.findViewById(R.id.park_recycler_view) as RecyclerView
         recyclerView.adapter = adapter
