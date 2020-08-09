@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource, reqparse
 from representations.subscription import SubscriptionSchema, CreateSubscriptionRequestSchema
-from resources.errors import InternalServerError
+from resources.errors import InternalServerError, BadRequestError
 
 
 class SubscriptionResource(Resource):
@@ -9,8 +9,13 @@ class SubscriptionResource(Resource):
         self.subscription_service = kwargs['subscription_service']
 
     def delete(self, id: str):
-        self.subscription_service.delete_by_id(id)
-        return None, 204
+        subscription, error = self.subscription_service.delete_by_id(id)
+        if error is not None and error == BadRequestError:
+            return None, 400
+        elif error is not None:
+            return None, 500
+        else:
+            return None, 204
 
 
 class SubscriptionsResource(Resource):
