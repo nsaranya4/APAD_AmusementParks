@@ -12,16 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.funtech.amusementpark.models.Park
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ParkFragment : Fragment() {
 
-    private val image1 = "https://drive.google.com/file/d/1Du2HkKN4OvrNTFlf1FX0cgMteznht4TY/view"
+    private val image1 = "https://firebasestorage.googleapis.com/v0/b/funtech-frontend.appspot.com/o/images%2Fcedar_point.jpg?alt=medias"
     private val image2 = "https://firebasestorage.googleapis.com/v0/b/funtech-frontend.appspot.com/o/images%2F7LK169PFGWMPL3H6CWMK02VNNTJSEW4W?alt=media"
     private val image3 = "https://images.pexels.com/photos/1067333/pexels-photo-1067333.jpeg"
     private val image4 = "https://firebasestorage.googleapis.com/v0/b/funtech-frontend.appspot.com/o/images%2Funiversal_s.jpg?alt=media"
@@ -38,7 +34,6 @@ class ParkFragment : Fragment() {
     )
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: ParkRecyclerAdapter
-    private lateinit var storage: FirebaseStorage
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,8 +46,7 @@ class ParkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        storage = Firebase.storage
-        adapter = ParkRecyclerAdapter(storage, parks)
+        adapter = ParkRecyclerAdapter(parks)
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         var recyclerView = view.findViewById(R.id.park_recycler_view) as RecyclerView
         recyclerView.adapter = adapter
