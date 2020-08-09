@@ -9,4 +9,5 @@ object Network {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     val parkService = retrofit.create(ParkService::class.java)
+    val postService = retrofit.create(PostService::class.java)
 }
