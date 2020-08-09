@@ -16,7 +16,7 @@ class ParkService:
     def create(self, create_park_request: CreateParkRequest):
         park = Park()
         user, error = self.user_repo.get_by_id(create_park_request.user_id)
-         if user is not None and error is None:
+        if user is not None and error is None:
             park.user = user
         else:
             return None, error
