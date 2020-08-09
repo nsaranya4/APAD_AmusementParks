@@ -32,6 +32,8 @@ Package contains all the Request, Response objects used to interact with backend
 
 ##### - [Requirements.txt]( https://github.com/APAD-Summer2020/Team4/blob/master/backend/app/requirements.txt ) 
 
+---
+
 ### UI
 This service hosts the frontend and communicates with the backend REST service using http client to perform CRUD operations.
 
@@ -53,6 +55,7 @@ Contains the html file for the website. We have used Jinja templating for dynami
 
 ##### - [Requirements.txt](https://github.com/APAD-Summer2020/Team4/blob/master/ui/app/requirements.txt) 
 
+---
 
 ### Android
 Android app to view the Amusement parks and rides shared by user. 
