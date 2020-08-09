@@ -15,8 +15,11 @@ class UserService:
         user.email = create_user_request.email
         user.image_id = create_user_request.image_id
         user.role = create_user_request.role
-        user = self.user_repo.create(user)
-        return self.user_schema.dump(user).data
+        user, error = self.user_repo.create(user)
+        if user is not None and error is None:
+            return self.user_schema.dump(user).data, None
+        else:
+            return None, error
 
     def get_by_email_id(self, email):
         user, error = self.user_repo.get_by_email_id(email)
