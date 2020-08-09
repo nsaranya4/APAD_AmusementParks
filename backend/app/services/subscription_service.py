@@ -41,7 +41,7 @@ class SubscriptionService:
     def delete_by_id(self, id: str):
         subscription, error = self.subscription_repo.get_by_id(id)
         if subscription is not None and error is None:
-            return self.subscription_repo.delete(subscription)
+            return self.subscription_repo.delete(subscription), None
         elif subscription is None and error is not None:
             return None, BadRequestError
         else:
