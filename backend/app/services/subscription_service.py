@@ -29,7 +29,7 @@ class SubscriptionService:
         
         subscription = Subscription(park=park, user=user)
         subscription, error = self.subscription_repo.create(subscription)
-        if post is not None and error is None:
+        if subscription is not None and error is None:
             return self.subscription_schema.dump(subscription).data, None
         else: 
             return None, error
@@ -40,9 +40,9 @@ class SubscriptionService:
 
     def delete_by_id(self, id: str):
         subscription, error = self.subscription_repo.get_by_id(id)
-        if park is not None and error is None:
-            return self.subscription_repo.delete(subscription)
-        elif park is None and error is not None:
+        if subscription is not None and error is None:
+            return self.subscription_repo.delete(subscription), None
+        elif subscription is None and error is not None:
             return None, BadRequestError
         else:
             return None, error
