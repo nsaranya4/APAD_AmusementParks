@@ -16,7 +16,7 @@ class ParkRepo:
         park_list = Park.objects
         if filters.keys().__contains__('user_id'):
             park_list = park_list.filter(user=filters['user_id'])
-        return park_list.skip(offset).limit(limit)
+        return park_list.order_by('-created_at').skip(offset).limit(limit)
 
     def create(self, park: Park):
         try:

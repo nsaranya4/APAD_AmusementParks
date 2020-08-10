@@ -1,6 +1,7 @@
 from mongoengine import (Document,
                          ReferenceField,
                          StringField,
+                         IntField,
                          ListField,
                          EmbeddedDocumentField,
                          CASCADE)
@@ -10,6 +11,7 @@ from .user import User
 
 
 class Post(Document):
+    created_at = IntField(required=True)
     title = StringField(required=True)
     description = StringField(required=True)
     image_id = StringField(required=True)

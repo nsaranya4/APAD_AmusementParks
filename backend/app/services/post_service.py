@@ -4,6 +4,7 @@ from repos.user_repo import UserRepo
 from models.post import Post, Location
 from representations.post import CreatePostRequest, PostSchema
 from resources.errors import BadRequestError
+import time
 
 
 class PostService:
@@ -36,7 +37,8 @@ class PostService:
         post.description = create_post_request.description
         post.image_id = create_post_request.image_id
         post.tags = create_post_request.tags
-        post.location = location             
+        post.location = location
+        post.created_at = time.time_ns()
         post, error = self.post_repo.create(post)
         if post is not None and error is None:
             return self.post_schema.dump(post).data, None
