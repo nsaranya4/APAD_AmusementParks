@@ -4,6 +4,8 @@ from repos.user_repo import UserRepo
 from models.subscription import Subscription
 from representations.subscription import CreateSubscriptionRequest, SubscriptionSchema
 from resources.errors import BadRequestError
+import time
+
 
 class SubscriptionService:
     def __init__(self, subscription_repo: SubscriptionRepo, park_repo: ParkRepo, user_repo: UserRepo):
@@ -27,7 +29,7 @@ class SubscriptionService:
         else:
             return None, error
         
-        subscription = Subscription(park=park, user=user)
+        subscription = Subscription(created_at=time.time_ns(), park=park, user=user)
         subscription, error = self.subscription_repo.create(subscription)
         if subscription is not None and error is None:
             return self.subscription_schema.dump(subscription).data, None

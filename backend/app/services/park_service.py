@@ -4,6 +4,7 @@ from models.park import Park
 from models.location import Location
 from representations.park import CreateParkRequest, ParkSchema
 from resources.errors import BadRequestError
+import time
 
 
 class ParkService:
@@ -27,7 +28,8 @@ class ParkService:
         park.name = create_park_request.name
         park.description = create_park_request.description
         park.image_id = create_park_request.image_id
-        park.location = location       
+        park.location = location
+        park.created_at = time.time_ns()
         park, error = self.park_repo.create(park)
         if park is not None and error is None:
             return self.park_schema.dump(park).data, None

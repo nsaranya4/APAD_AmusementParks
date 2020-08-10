@@ -21,7 +21,7 @@ class PostRepo:
             post_list = post_list.filter(park=filters['park_id'])
         if filters.keys().__contains__('tag'):
             post_list = post_list.filter(tags=filters['tag'])
-        return post_list.skip(offset).limit(limit)
+        return post_list.order_by('-created_at').skip(offset).limit(limit)
 
     def create(self, post: Post):
         try:
