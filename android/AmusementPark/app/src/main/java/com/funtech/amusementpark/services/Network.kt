@@ -10,4 +10,5 @@ object Network {
         .build()
     val parkService = retrofit.create(ParkService::class.java)
     val postService = retrofit.create(PostService::class.java)
+    val userService = retrofit.create(UserService::class.java)
 }
