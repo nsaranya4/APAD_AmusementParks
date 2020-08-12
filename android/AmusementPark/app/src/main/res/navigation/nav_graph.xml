@@ -27,6 +27,9 @@
             android:id="@+id/action_PostFragment_to_CreatePostFragment"
             app:destination="@id/CreatePostFragment" />
         <action
+            android:id="@+id/action_PostFragment_to_SinglePostFragment"
+            app:destination="@id/SinglePostFragment" />
+        <action
             android:id="@+id/action_PostFragment_to_ParkFragment"
             app:destination="@id/ParkFragment" />
         <argument
@@ -46,6 +49,20 @@
             app:destination="@id/PostFragment" />
         <argument
             android:name="park_id"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SinglePostFragment"
+        android:name="com.funtech.amusementpark.SinglePostFragment"
+        android:label="@string/single_post_fragment_label"
+        tools:layout="@layout/fragment_single_post">
+
+        <action
+            android:id="@+id/action_SinglePostFragment_to_PostFragment"
+            app:destination="@id/PostFragment" />
+        <argument
+            android:name="post_id"
             app:argType="string" />
     </fragment>
 
