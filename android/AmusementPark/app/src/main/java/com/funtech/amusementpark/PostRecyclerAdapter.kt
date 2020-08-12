@@ -48,6 +48,7 @@ class PostRecyclerAdapter(private val posts: ArrayList<Post>,
             }
             view.post_title.text = post.title
             view.post_description.text = post.description
+            view.post_user.text = post.user.name
         }
 
         override fun onClick(v: View) {
