@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import com.funtech.amusementpark.models.CreateUserRequest
 import com.funtech.amusementpark.models.User
 import com.funtech.amusementpark.services.Network
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -34,6 +35,26 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailed() {
         Toast.makeText(applicationContext, "Login Failed", Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun createUser(context: Context, createUserRequest: CreateUserRequest) {
+        var userCall : Call<User> = Network.userService.createUser(createUserRequest)
+        userCall.enqueue(object : Callback<User> {
+            override fun onResponse(call : Call<User>, response: Response<User>)
+            {
+                if (response.isSuccessful) {
+                    val user = response.body()!!
+                }
+                else {
+                    Log.e(TAG, "Failed to get user by email from backend")
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Log.e(TAG, "Failed to get user by email from backend")
+            }
+        })
     }
 
     private fun getUserByEmail(context: Context, email: String) {
