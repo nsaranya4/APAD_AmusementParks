@@ -1,12 +1,19 @@
 // This code is written by using SampleProject as reference
 window.addEventListener('load', function () {
+
+  var delete_cookie = function(name) {
+	document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  };
+
   document.getElementById('sign-out').onclick = function () {
     firebase.auth().signOut();
+    delete_cookie("funtech_token");
   };
   signbtn = document.getElementById('sign-out-only')
   if (signbtn) {
       document.getElementById('sign-out-only').onclick = function () {
       firebase.auth().signOut();
+      delete_cookie("funtech_token");
     };
   }
 
@@ -44,10 +51,11 @@ window.addEventListener('load', function () {
       if (login) {
         login.hidden = true;
       }
-      document.cookie = "funtech_token=";
+      delete_cookie("funtech_token");
     }
   }, function (error) {
     console.log(error);
     alert('Unable to log in: ' + error)
+    delete_cookie("funtech_token")
   });
 });
