@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.funtech.amusementpark.models.Park
+import com.funtech.amusementpark.models.User
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
@@ -49,6 +50,7 @@ class ParkRecyclerAdapter(private val parks: ArrayList<Park>,
             }
             view.park_name.text = park.name
             view.park_description.text = park.description
+            view.park_user.text = park.user.name
         }
 
         override fun onClick(v: View) {
