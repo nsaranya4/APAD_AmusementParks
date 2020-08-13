@@ -1,7 +1,6 @@
 package com.funtech.amusementpark
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -12,8 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.fragment.navArgs
 import com.funtech.amusementpark.models.CreatePostRequest
 import com.funtech.amusementpark.models.Post
@@ -76,32 +75,24 @@ class CreatePostFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_create_post, container, false)
     }
 
-
-    fun getLastLocation(){
-        //first we check permission
-        if(CheckPermission()){
-            //check if location servise enabled
-            if(isLocationEnabled()){
-                //Get location
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener {task->
+    private fun getLastLocation(context: Context) {
+        if(checkPermission(context)) {
+            if(isLocationEnabled(context)) {
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                     var location: Location? = task.result
                     if(location == null){
-                        //if location is null get new user location
                         getNewLocation()
-                    }else{
-                        textView_location.text = "You Current Location is : \nLat:" + location.latitude + " ; Long:" + location.longitude
+                    } else {
                     }
                 }
-            }else{
-                Toast.makeText(this,"Please Turn on Location Services", Toast.LENGTH_SHORT).show()
+            } else {
             }
-        }else{
-            RequestPermission()
+        } else {
+            requestPermission()
         }
     }
 
-
-    fun getNewLocation(){
+    private fun getNewLocation() {
         var locationRequest =  LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
@@ -111,48 +102,28 @@ class CreatePostFragment : Fragment() {
         fusedLocationProviderClient!!.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper())
     }
 
-    //create location callback variable
-    private val locationCallback = object : LocationCallback(){
+    private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             var lastLocation: Location = locationResult.lastLocation
-            //set new location
-           // textView_location.text = "Your Current Location is : \nLat:" + lastLocation.latitude + " ; Long:" + lastLocation.longitude
         }
     }
 
 
-
-    //first we need to create a function that will check the user permission
-    fun CheckPermission():Boolean{
-        //this function will return a boolean
-        //true: if we have permission
-        //false if not
-        if(
-            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        ){
+    private fun checkPermission(context: Context): Boolean{
+        if( ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             return true
         }
-
         return false
-
     }
 
-    //Now we need to create a function that will allow us to get user permission
-    fun RequestPermission(){
-        //this function will allows us to tell the user to requesut the necessary permsiion if they are not garented
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
-        )
+    private fun requestPermission() {
+        requestPermissions(arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_ID);
     }
 
-    //Now we need a function that checks if the location service of the device is enabled
-    fun isLocationEnabled():Boolean{
-        //this function will return to us the state of the location service
-        //if the gps or the network provider is enabled then it will return true otherwise it will return false
-        var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private fun isLocationEnabled(context: Context): Boolean {
+        var locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER)
     }
@@ -162,20 +133,13 @@ class CreatePostFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        //this is a built-in function that check the permission result
         if(requestCode == PERMISSION_ID){
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Log.d("Debug:", "You have the permission")
+                Log.d(TAG, "You have the GPS permission")
             }
         }
 
     }
-
-
-
-
-
-
     companion object {
         private val TAG = "CREATE_POST_FRAGMENT"
         fun newInstance(): CreatePostFragment = CreatePostFragment()
