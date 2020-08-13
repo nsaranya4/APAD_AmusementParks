@@ -1,5 +1,6 @@
 package com.funtech.amusementpark
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
@@ -14,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.fragment.navArgs
 import com.funtech.amusementpark.models.CreatePostRequest
 import com.funtech.amusementpark.models.Post
@@ -65,8 +65,8 @@ class CreatePostFragment : Fragment() {
         Log.d(TAG, userId)
         Log.d(TAG, parkId)
 
-        val GPSButton = view.findViewById(R.id.GPS_Button) as Button
-        GPSButton.setOnClickListener {
+        val gpsButton = view.findViewById(R.id.gps_button) as Button
+        gpsButton.setOnClickListener {
             Log.d(TAG, "GPS Button clicked")
             getLastLocation(view.context)
         }
@@ -100,6 +100,7 @@ class CreatePostFragment : Fragment() {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun getNewLocation() {
         var locationRequest =  LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
