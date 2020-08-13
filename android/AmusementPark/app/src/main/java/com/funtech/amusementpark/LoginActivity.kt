@@ -85,11 +85,13 @@ class LoginActivity : AppCompatActivity() {
                     storeUserInSharePreferences(user)
                     progressBar.visibility = View.GONE
                     startMainActivity(context)
-                } else if (response.code() == 404) {
-                    Log.d(TAG, "Creating new user")
-                    val createUserRequest = CreateUserRequest(user.displayName!!, "image_id", user.email!!, "admin")
-                    createUser(context, createUserRequest)
-                } else {
+                }
+//                else if (response.code() == 404) {
+//                    Log.d(TAG, "Creating new user")
+//                    val createUserRequest = CreateUserRequest(user.displayName!!, "image_id", user.email!!, "admin")
+//                    createUser(context, createUserRequest)
+//                }
+                else {
                     Log.e(TAG, "Failed to get user by email from backend")
                     showLoginFailed()
                 }
