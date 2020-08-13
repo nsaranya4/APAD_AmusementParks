@@ -10,7 +10,6 @@ interface UserService {
     fun getUserByEmail(@Query("email") email: String): Call<User>
 
     @POST("/funtech/v1/users")
-    @FormUrlEncoded
     fun createUser(@Body createUserRequest: CreateUserRequest): Call<User>
 
 }

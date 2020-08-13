@@ -26,8 +26,7 @@ interface PostService {
     @GET("/funtech/v1/posts/{id}")
     fun getPostById(@Path("id") id: String): Call<Post>
 
-    @POST("/funtech/v1/users")
-    @FormUrlEncoded
+    @POST("/funtech/v1/posts")
     fun createPost(@Body createPostRequest: CreatePostRequest): Call<Post>
 
 }
