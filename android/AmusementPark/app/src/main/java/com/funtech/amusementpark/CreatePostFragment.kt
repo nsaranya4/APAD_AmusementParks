@@ -8,36 +8,43 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode
 import com.esafirm.imagepicker.model.Image
 import com.funtech.amusementpark.models.CreatePostRequest
-import com.funtech.amusementpark.models.Location as MyLocation
 import com.funtech.amusementpark.models.Post
 import com.funtech.amusementpark.services.Network
 import com.google.android.gms.location.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_create_post.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import com.funtech.amusementpark.models.Location as MyLocation
 
 class CreatePostFragment : Fragment() {
     private val alphabet: List<Char> = ('A'..'Z') + ('0'..'9')
     private lateinit var parkId: String
     private lateinit var userId: String
     private lateinit var image: Image
+    private lateinit var createPostButton: Button
+    private lateinit var progressBar: ProgressBar
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var locationRequest: LocationRequest
     val args: PostFragmentArgs by navArgs()
@@ -49,12 +56,14 @@ class CreatePostFragment : Fragment() {
         return userId!!
     }
 
-    private fun createPost(context: Context, createPostRequest: CreatePostRequest) {
+    private fun createPost(createPostRequest: CreatePostRequest) {
         var postCall : Call<Post> = Network.postService.createPost(createPostRequest)
         postCall.enqueue(object : Callback<Post> {
+
             override fun onResponse(call : Call<Post>, response: Response<Post>)
             {
                 if (response.isSuccessful) {
+                    progressBar.visibility = View.GONE
                     val action = CreatePostFragmentDirections.actionCreatePostFragmentToPostFragment(parkId)
                     findNavController().navigate(action)
                 }
@@ -88,8 +97,16 @@ class CreatePostFragment : Fragment() {
         return imageId
     }
 
-    private fun uploadImage(imageId: String)  {
-
+    private fun uploadImageAndCreatePost(createPostRequest: CreatePostRequest)  {
+        val storageRef = FirebaseStorage.getInstance().reference
+        var imagesRef: StorageReference = storageRef.child(createPostRequest.image_id)
+        val filePath: Uri = Uri.fromFile(File(image.path))
+        imagesRef.putFile(filePath)
+            .addOnSuccessListener {
+                createPost(createPostRequest)
+            }.addOnFailureListener {
+                Log.e(TAG, "Failed to upload image")
+            }
     }
 
 
@@ -122,19 +139,21 @@ class CreatePostFragment : Fragment() {
             takeImage()
         }
 
-        val createPostButton = view.findViewById(R.id.create_post_button) as Button
+        progressBar = view.findViewById(R.id.create_post_loading) as ProgressBar
+        createPostButton = view.findViewById(R.id.create_post_button) as Button
         createPostButton.setOnClickListener {
             Log.d(TAG, "create Post Button clicked")
+            createPostButton.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
             val title = view.title_input.text.toString()
-            val imageId = generateImageId()
+            val imageId = "images/" + generateImageId()
             val description = view.description_input.text.toString()
             val location = MyLocation(1.0, 1.0)
             val tags = view.title_input.text.toString().split(",").map { it.trim() }
-            uploadImage(imageId)
             val createPostRequest =  CreatePostRequest(title = title, tags = tags,
-                image_id = "images/2WDSX5ID65LIYE1RLOQ0OA4H3IBB4A7M", description = description,
+                image_id = imageId, description = description,
                 location = location, user_id = userId, park_id = parkId)
-            createPost(view.context, createPostRequest)
+            uploadImageAndCreatePost(createPostRequest)
         }
 
     }
