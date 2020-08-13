@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +48,11 @@ class PostFragment : Fragment() {
         })
     }
 
+    private fun openCreatePostFragment() {
+        val action = PostFragmentDirections.actionPostFragmentToCreatePostFragment(this.parkId)
+        findNavController().navigate(action)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +64,11 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         parkId = args.parkId
+        val createPostButton = view.findViewById(R.id.create_post) as Button
+        createPostButton.setOnClickListener {
+            Log.d(TAG, "create post button clicked")
+            openCreatePostFragment()
+        }
         adapter = PostRecyclerAdapter(posts, view.context, findNavController())
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView = view.findViewById(R.id.post_recycler_view) as RecyclerView

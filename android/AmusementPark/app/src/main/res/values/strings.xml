@@ -7,4 +7,5 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="button_sign_in">Google SignIn</string>
     <string name="single_post_fragment_label">Post</string>
+    <string name="create_post">Create Post</string>
 </resources>
