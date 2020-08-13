@@ -24,23 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-    <Button
-        android:id="@+id/GPS_Button"
-        android:text="@string/create_post"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:padding="10dp"
-        android:bottomRightRadius="20dp"
-        android:bottomLeftRadius="20dp"
-        android:topLeftRadius="20dp"
-        android:topRightRadius="20dp"
-        android:background="@color/colorGreen"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/post_recycler_view"
