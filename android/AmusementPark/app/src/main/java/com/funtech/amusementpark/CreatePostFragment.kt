@@ -1,16 +1,16 @@
 package com.funtech.amusementpark
 
 import android.content.Context
-import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import com.funtech.amusementpark.models.CreatePostRequest
 import com.funtech.amusementpark.models.Post
-import com.funtech.amusementpark.models.User
 import com.funtech.amusementpark.services.Network
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +18,15 @@ import retrofit2.Response
 
 
 class CreatePostFragment : Fragment() {
+    private lateinit var parkId: String
+    private lateinit var userId: String
+    val args: PostFragmentArgs by navArgs()
+
+    private fun getUserIdFromSharedPreferences(context: Context) : String {
+        var sharedPreferences = context.getSharedPreferences("funtech", Context.MODE_PRIVATE);
+        val userId = sharedPreferences.getString("user_id", null)
+        return userId!!
+    }
 
     private fun createPost(context: Context, createPostRequest: CreatePostRequest) {
         var postCall : Call<Post> = Network.postService.createPost(createPostRequest)
@@ -36,6 +45,14 @@ class CreatePostFragment : Fragment() {
                 Log.e(TAG, "Failed to get user by email from backend")
             }
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        parkId = args.parkId
+        userId = getUserIdFromSharedPreferences(view.context)
+        Log.d(TAG, userId)
+        Log.d(TAG, parkId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
