@@ -1,9 +1,11 @@
 package com.funtech.amusementpark
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.nfc.Tag
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.fragment.navArgs
@@ -62,6 +65,12 @@ class CreatePostFragment : Fragment() {
         userId = getUserIdFromSharedPreferences(view.context)
         Log.d(TAG, userId)
         Log.d(TAG, parkId)
+
+        val GPSButton = view.findViewById(R.id.GPS_Button) as Button
+        GPSButton.setOnClickListener {
+            Log.d(TAG, "GPS Button clicked")
+            getLastLocation(view.context)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,13 +107,16 @@ class CreatePostFragment : Fragment() {
         locationRequest.interval = 0
         locationRequest.fastestInterval = 0
         locationRequest.numUpdates = 1
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        val activity = getActivity() as Activity
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
         fusedLocationProviderClient!!.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper())
     }
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             var lastLocation: Location = locationResult.lastLocation
+            val msg = "You Current Location is : \nLat:" + lastLocation.latitude + " ; Long:" + lastLocation.longitude
+            Log.d(TAG,msg)
         }
     }
 
