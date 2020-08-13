@@ -3,7 +3,9 @@ package com.funtech.amusementpark
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -14,23 +16,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.esafirm.imagepicker.features.ImagePicker
+import com.esafirm.imagepicker.features.ReturnMode
+import com.esafirm.imagepicker.model.Image
 import com.funtech.amusementpark.models.CreatePostRequest
+import com.funtech.amusementpark.models.Location as MyLocation
 import com.funtech.amusementpark.models.Post
 import com.funtech.amusementpark.services.Network
 import com.google.android.gms.location.*
+import kotlinx.android.synthetic.main.fragment_create_post.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class CreatePostFragment : Fragment() {
+    private val alphabet: List<Char> = ('A'..'Z') + ('0'..'9')
     private lateinit var parkId: String
     private lateinit var userId: String
-    val args: PostFragmentArgs by navArgs()
+    private lateinit var image: Image
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var locationRequest: LocationRequest
+    val args: PostFragmentArgs by navArgs()
 
 
     private fun getUserIdFromSharedPreferences(context: Context) : String {
@@ -45,18 +55,53 @@ class CreatePostFragment : Fragment() {
             override fun onResponse(call : Call<Post>, response: Response<Post>)
             {
                 if (response.isSuccessful) {
-                    val user = response.body()!!
+                    val action = CreatePostFragmentDirections.actionCreatePostFragmentToPostFragment(parkId)
+                    findNavController().navigate(action)
                 }
                 else {
-                    Log.e(TAG, "Failed to get user by email from backend")
+                    Log.e(TAG, "Failed to create post")
                 }
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                Log.e(TAG, "Failed to get user by email from backend")
+                Log.e(TAG, "Failed to create post")
             }
         })
     }
+
+    private fun takeImage() {
+        ImagePicker.create(this)
+            .returnMode(ReturnMode.ALL)
+            .folderMode(true)
+            .toolbarFolderTitle("Folder")
+            .toolbarImageTitle("Tap to select")
+            .toolbarArrowColor(Color.BLACK)
+            .single()
+            .showCamera(true)
+            .imageDirectory("Camera")
+            .start();
+    }
+
+    private fun generateImageId(): String {
+        val imageId = List(32) { alphabet.random() }.joinToString("")
+        Log.d(TAG, "imageid= " + imageId)
+        return imageId
+    }
+
+    private fun uploadImage(imageId: String)  {
+
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            val pickedImage: Image = ImagePicker.getFirstImageOrNull(data)
+            Log.d(TAG, pickedImage.name)
+            image = pickedImage
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,6 +115,28 @@ class CreatePostFragment : Fragment() {
             Log.d(TAG, "GPS Button clicked")
             getLastLocation(view.context)
         }
+
+        val cameraButton = view.findViewById(R.id.camera_button) as ImageButton
+        cameraButton.setOnClickListener {
+            Log.d(TAG, "camera Button clicked")
+            takeImage()
+        }
+
+        val createPostButton = view.findViewById(R.id.create_post_button) as Button
+        createPostButton.setOnClickListener {
+            Log.d(TAG, "create Post Button clicked")
+            val title = view.title_input.text.toString()
+            val imageId = generateImageId()
+            val description = view.description_input.text.toString()
+            val location = MyLocation(1.0, 1.0)
+            val tags = view.title_input.text.toString().split(",").map { it.trim() }
+            uploadImage(imageId)
+            val createPostRequest =  CreatePostRequest(title = title, tags = tags,
+                image_id = "images/2WDSX5ID65LIYE1RLOQ0OA4H3IBB4A7M", description = description,
+                location = location, user_id = userId, park_id = parkId)
+            createPost(view.context, createPostRequest)
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
