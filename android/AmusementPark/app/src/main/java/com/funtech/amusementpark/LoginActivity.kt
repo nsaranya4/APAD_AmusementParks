@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -37,6 +38,19 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, "Login Failed", Toast.LENGTH_SHORT).show()
     }
 
+    private fun startMainActivity(context: Context) {
+        var intent = Intent(context, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun storeUserInSharePreferences(user: User) {
+        var sharedPreferences = getSharedPreferences("funtech", Context.MODE_PRIVATE);
+        val editor = sharedPreferences.edit()
+        editor.putString("user_id", user.id)
+        editor.putString("user_email", user.email)
+        editor.putString("user_name", user.name)
+        editor.commit()
+    }
 
     private fun createUser(context: Context, createUserRequest: CreateUserRequest) {
         var userCall : Call<User> = Network.userService.createUser(createUserRequest)
@@ -45,36 +59,37 @@ class LoginActivity : AppCompatActivity() {
             {
                 if (response.isSuccessful) {
                     val user = response.body()!!
+                    storeUserInSharePreferences(user)
+                    progressBar.visibility = View.GONE
+                    startMainActivity(context)
                 }
                 else {
-                    Log.e(TAG, "Failed to get user by email from backend")
+                    Log.e(TAG, "Failed to creates user in the backend")
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "Failed to get user by email from backend")
+                Log.e(TAG, "Failed to creates user in the backend")
             }
         })
     }
 
-    private fun getUserByEmail(context: Context, email: String) {
-        var userCall : Call<User> = Network.userService.getUserByEmail(email)
+    private fun createUserIfNotExist(context: Context, user: FirebaseUser) {
+        var userCall : Call<User> = Network.userService.getUserByEmail(user.email!!)
         userCall.enqueue(object : Callback<User> {
+
             override fun onResponse(call : Call<User>, response: Response<User>)
             {
                 if (response.isSuccessful) {
                     val user = response.body()!!
-                    var sharedPreferences = getSharedPreferences("funtech", Context.MODE_PRIVATE);
-                    val editor = sharedPreferences.edit()
-                    editor.putString("user_id", user.id)
-                    editor.putString("user_email", user.email)
-                    editor.putString("user_name", user.name)
-                    editor.commit()
+                    storeUserInSharePreferences(user)
                     progressBar.visibility = View.GONE
-                    var intent = Intent(context, MainActivity::class.java)
-                    startActivity(intent)
-                }
-                else {
+                    startMainActivity(context)
+                } else if (response.code() == 404) {
+                    Log.d(TAG, "Creating new user")
+                    val createUserRequest = CreateUserRequest(user.displayName!!, "image_id", user.email!!, "admin")
+                    createUser(context, createUserRequest)
+                } else {
                     Log.e(TAG, "Failed to get user by email from backend")
                     showLoginFailed()
                 }
@@ -93,9 +108,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    val userEmail = user?.email
-                    getUserByEmail(context, userEmail!!)
+                    createUserIfNotExist(context, auth.currentUser!!)
                 } else {
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     showLoginFailed()
@@ -133,8 +146,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-
-
+    
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
