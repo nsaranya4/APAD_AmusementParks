@@ -1,5 +1,6 @@
 package com.funtech.amusementpark
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -58,7 +59,10 @@ class PostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_post, container, false)
+        val view = inflater.inflate(R.layout.fragment_post, container, false)
+        val myActivity = activity as Activity
+        myActivity.title = "POSTS"
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
