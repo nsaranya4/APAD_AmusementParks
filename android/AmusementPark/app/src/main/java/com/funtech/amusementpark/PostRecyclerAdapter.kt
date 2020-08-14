@@ -49,6 +49,7 @@ class PostRecyclerAdapter(private val posts: ArrayList<Post>,
             view.post_title.text = post.title
             view.post_description.text = post.description
             view.post_user.text = post.user.name
+            view.post_tags.text = post.tags.joinToString(prefix = "#", separator = " #")
         }
 
         override fun onClick(v: View) {
