@@ -1,5 +1,6 @@
 package com.funtech.amusementpark
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,6 +51,8 @@ class ParkFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_park, container, false)
+        val myActivity = activity as Activity
+        myActivity.title = "PARKS"
         return view
     }
 
