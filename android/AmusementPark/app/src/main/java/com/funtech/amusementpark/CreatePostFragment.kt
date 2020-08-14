@@ -198,7 +198,7 @@ class CreatePostFragment : Fragment() {
             val imageId = "images/" + generateImageId()
             val description = view.description_input.text.toString()
             val location = MyLocation(1.0, 1.0)
-            val tags = view.title_input.text.toString().split(",").map { it.trim() }
+            val tags = view.tags_input.text.toString().split(",").map { it.trim() }
             val createPostRequest =  CreatePostRequest(title = title, tags = tags,
                 image_id = imageId, description = description,
                 location = location, user_id = userId, park_id = parkId)
