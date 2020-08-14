@@ -11,13 +11,13 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ProgressBar
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -31,6 +31,7 @@ import com.funtech.amusementpark.services.Network
 import com.google.android.gms.location.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_create_post.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,12 +43,45 @@ class CreatePostFragment : Fragment() {
     private val alphabet: List<Char> = ('A'..'Z') + ('0'..'9')
     private lateinit var parkId: String
     private lateinit var userId: String
-    private lateinit var image: Image
     private lateinit var createPostButton: Button
     private lateinit var progressBar: ProgressBar
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var locationRequest: LocationRequest
     val args: PostFragmentArgs by navArgs()
+
+    // Input fields to be populated
+    private lateinit var title: EditText
+    private lateinit var description: EditText
+    private lateinit var tags: EditText
+    private var lat: Double? = null
+    private var lng: Double? = null
+    private lateinit var image: Image
+    private lateinit var imageView: ImageView
+
+
+    private fun getTextWatcher(editText: EditText) : TextWatcher {
+        return object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                checkIfDataIsPopulated()
+            }
+        }
+    }
+
+
+
+
+    private fun checkIfDataIsPopulated() {
+        Log.d(TAG, "checkIfDataIsPopulated")
+        if (title.text.toString() != null
+            && description.text.toString() != null
+            && tags.text.toString() != null
+            && image != null && image.path != null) {
+            createPostButton.isEnabled = true
+        }
+    }
+
 
 
     private fun getUserIdFromSharedPreferences(context: Context) : String {
@@ -115,6 +149,9 @@ class CreatePostFragment : Fragment() {
             val pickedImage: Image = ImagePicker.getFirstImageOrNull(data)
             Log.d(TAG, pickedImage.name)
             image = pickedImage
+            imageView.visibility = View.VISIBLE
+            val filePath: Uri = Uri.fromFile(File(image.path))
+            Picasso.with(context).load(filePath).into(imageView)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -127,7 +164,7 @@ class CreatePostFragment : Fragment() {
         Log.d(TAG, userId)
         Log.d(TAG, parkId)
 
-        val gpsButton = view.findViewById(R.id.gps_button) as Button
+        val gpsButton = view.findViewById(R.id.gps_button) as ImageButton
         gpsButton.setOnClickListener {
             Log.d(TAG, "GPS Button clicked")
             getLastLocation(view.context)
@@ -139,8 +176,20 @@ class CreatePostFragment : Fragment() {
             takeImage()
         }
 
+        title = view.findViewById(R.id.title_input) as EditText
+        description = view.findViewById(R.id.description_input) as EditText
+        tags = view.findViewById(R.id.tags_input) as EditText
+
+//        Register edit text to see if we want to enable the create button
+//        title.addTextChangedListener(getTextWatcher(title));
+//        description.addTextChangedListener(getTextWatcher(description));
+//        tags.addTextChangedListener(getTextWatcher(tags));
+//        Log.d(TAG, "added text edit listener")
+
+        imageView = view.findViewById(R.id.create_post_image) as ImageView
         progressBar = view.findViewById(R.id.create_post_loading) as ProgressBar
         createPostButton = view.findViewById(R.id.create_post_button) as Button
+//        createPostButton.isEnabled = false
         createPostButton.setOnClickListener {
             Log.d(TAG, "create Post Button clicked")
             createPostButton.visibility = View.GONE
