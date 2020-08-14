@@ -45,16 +45,34 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/post_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|start"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:text="Post Tags"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14dp" />
+
+        <TextView
             android:id="@+id/post_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|start"
             android:layout_marginStart="1dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="5"
             android:text="Post User"
             android:textSize="14sp" />
+
+
 
     </LinearLayout>
 
