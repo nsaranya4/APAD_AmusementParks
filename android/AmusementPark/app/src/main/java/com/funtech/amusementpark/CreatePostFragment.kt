@@ -45,8 +45,7 @@ class CreatePostFragment : Fragment() {
     private lateinit var userId: String
     private lateinit var createPostButton: Button
     private lateinit var progressBar: ProgressBar
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    lateinit var locationRequest: LocationRequest
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     val args: PostFragmentArgs by navArgs()
 
     // Input fields to be populated
@@ -167,6 +166,7 @@ class CreatePostFragment : Fragment() {
         val gpsButton = view.findViewById(R.id.gps_button) as ImageButton
         gpsButton.setOnClickListener {
             Log.d(TAG, "GPS Button clicked")
+//            Toast.makeText(context, "Getting GPS location", Toast.LENGTH_SHORT).show()
             getLastLocation(view.context)
         }
 
@@ -197,7 +197,7 @@ class CreatePostFragment : Fragment() {
             val title = view.title_input.text.toString()
             val imageId = "images/" + generateImageId()
             val description = view.description_input.text.toString()
-            val location = MyLocation(1.0, 1.0)
+            val location = MyLocation(lat!!, lng!!)
             val tags = view.tags_input.text.toString().split(",").map { it.trim() }
             val createPostRequest =  CreatePostRequest(title = title, tags = tags,
                 image_id = imageId, description = description,
@@ -209,6 +209,8 @@ class CreatePostFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val myActivity = activity as Activity
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(myActivity)
     }
 
     override fun onCreateView(
@@ -219,16 +221,24 @@ class CreatePostFragment : Fragment() {
     }
 
     private fun getLastLocation(context: Context) {
+        Toast.makeText(context, "getLastLocation", Toast.LENGTH_SHORT).show()
         if(checkPermission(context)) {
             if(isLocationEnabled(context)) {
+                Toast.makeText(context, "location enabled", Toast.LENGTH_SHORT).show()
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-                    var location: Location? = task.result
-                    if(location == null){
-                        getNewLocation()
-                    } else {
+                        Toast.makeText(context, "fusedLocationProviderClient oncomplete", Toast.LENGTH_SHORT).show()
+                        var location: Location? = task.result
+                        if (location == null) {
+                            Toast.makeText(context, "fusedLocationProviderClient location null", Toast.LENGTH_SHORT).show()
+                            getNewLocation()
+                        } else {
+                            Toast.makeText(context, "know last location", Toast.LENGTH_SHORT).show()
+                            lat = location.latitude
+                            lng = location.longitude
                     }
                 }
             } else {
+
             }
         } else {
             requestPermission()
@@ -237,26 +247,29 @@ class CreatePostFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getNewLocation() {
+        Toast.makeText(context, "get new location", Toast.LENGTH_SHORT).show()
         var locationRequest =  LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
         locationRequest.fastestInterval = 0
         locationRequest.numUpdates = 1
-        val activity = getActivity() as Activity
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
         fusedLocationProviderClient!!.requestLocationUpdates(locationRequest,locationCallback, Looper.myLooper())
     }
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
+            Toast.makeText(context, "onLocationResult", Toast.LENGTH_SHORT).show()
             var lastLocation: Location = locationResult.lastLocation
+            lat = lastLocation.latitude
+            lng = lastLocation.longitude
             val msg = "You Current Location is : \nLat:" + lastLocation.latitude + " ; Long:" + lastLocation.longitude
             Log.d(TAG,msg)
         }
     }
 
 
-    private fun checkPermission(context: Context): Boolean{
+    private fun checkPermission(context: Context): Boolean {
+        Toast.makeText(context, "checkPermission", Toast.LENGTH_SHORT).show()
         if( ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             return true
@@ -270,6 +283,7 @@ class CreatePostFragment : Fragment() {
     }
 
     private fun isLocationEnabled(context: Context): Boolean {
+        Toast.makeText(context, "isLocationEnabled", Toast.LENGTH_SHORT).show()
         var locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER)
