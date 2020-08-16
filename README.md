@@ -64,8 +64,11 @@ Android app to view the Amusement parks and rides shared by user.
 - It connects to the firebase storage for uploading and downloading images
 
 #### Libraries
-- Firebase is used for authentication and uploading and downloading images 
+- [Firebase Google SignIn](https://firebase.google.com/docs/auth/android/google-signin): for implementing Single Sign In functionality
+- [Firebase Cloud Storage](https://firebase.google.com/docs/storage/android/start): for implementing upload/download image functionality
 - [Retrofit](https://square.github.io/retrofit/) library drastically reduces the boilerplate code and make integration with backend(REST) service seamless.
 - [Picasso](https://square.github.io/picasso/)  provides seamless support for displaying images.
+- [ImagePicker](https://github.com/esafirm/android-image-picker): library for integrating with camera and gallery to add pictures to post
+
 
  
