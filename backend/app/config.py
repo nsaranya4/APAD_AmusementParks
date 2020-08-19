@@ -10,4 +10,4 @@ class DevelopmentConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
-    MONGODB_HOST = 'mongodb+srv://funtechrw:funtechmongo@funtech-cluster.sldnf.gcp.mongodb.net/funtechprod?retryWrites=true&w=majority'
+    MONGODB_HOST = '<MONGODB_URL>'

@@ -10,4 +10,4 @@ class DevelopmentConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
-    BACKEND_URL = 'https://funtech-backend.uc.r.appspot.com'
+    BACKEND_URL = '<BACKEND_URL>'
